@@ -1,5 +1,6 @@
 package com.spring.bioMedical.repository;
 
+import com.spring.bioMedical.entity.Admin;
 import com.spring.bioMedical.entity.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +18,5 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     @Query("select b from Event b where b.start >= ?1 and b.end <= ?2")
     public List<Event> findByDateBetween(Date start, Date end);
 
+    List<Event> findAllByCreatedBy(Admin admin);
 }

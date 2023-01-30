@@ -51,6 +51,7 @@ class EventController {
             Event old = optionalEvent.get();
             old.setTitle(event.getTitle());
             old.setDescription(event.getDescription());
+            old.setLocation(event.getLocation());
             old.setStart(event.getStart());
             old.setEnd(event.getEnd());
             old.setModification(new Date());
@@ -61,8 +62,9 @@ class EventController {
     }
 
     @RequestMapping(value = "/event", method = RequestMethod.DELETE)
-    public void removeEvent(@RequestBody Event event) {
+    public Event removeEvent(@RequestBody Event event) {
         eventRepository.delete(event);
+        return event;
     }
 
     @RequestMapping(value = "/events", method = RequestMethod.GET)
