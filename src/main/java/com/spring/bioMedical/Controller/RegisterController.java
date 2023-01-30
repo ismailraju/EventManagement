@@ -94,7 +94,7 @@ public class RegisterController {
 					+ appUrl + "/confirm?token=" + user.getConfirmationToken());
 			registrationEmail.setFrom("spring.email.auth@gmail.com");
 			
-			emailService.sendEmail(registrationEmail);
+//			emailService.sendEmail(registrationEmail);
 			
 			modelAndView.addObject("confirmationMessage", "A confirmation e-mail has been sent to " + user.getEmail());
 			modelAndView.setViewName("register");

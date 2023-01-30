@@ -62,6 +62,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/static/**").permitAll()
                 .antMatchers("/vendor/**").permitAll()
                 .antMatchers("/resources/**").permitAll()
+                .antMatchers("/public/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -85,6 +86,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/js/**", "/vendor/**",
                 "/bootstrap/**",
                 "/event/**",
+                "/public/**",
                 "/Image/**"
         );
 

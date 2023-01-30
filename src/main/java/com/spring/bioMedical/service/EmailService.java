@@ -22,8 +22,8 @@ public class EmailService {
 		this.mailSender = mailSender;
 	}
 	
-	@Async
-	public void sendEmail(SimpleMailMessage email) {
-		mailSender.send(email);
-	}
+//	@Async
+//	public void sendEmail(SimpleMailMessage email) {
+//		mailSender.send(email);
+//	}
 }

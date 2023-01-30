@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.Transient;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -45,6 +44,11 @@ public class Participant {
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
     private Date creation;
+
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "event_id", referencedColumnName = "id")
+    private Event event;
 
 
 }

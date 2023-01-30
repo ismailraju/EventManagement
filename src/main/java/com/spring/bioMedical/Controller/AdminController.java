@@ -442,7 +442,7 @@ public class AdminController {
 
 
     @GetMapping("/event/{id}")
-    public String eventDetails(@RequestParam("id") Integer id, Model theModel) {
+    public String eventDetails(@PathVariable("id") Integer id, Model theModel) {
 
         Event event = eventService.findById(id);
 
