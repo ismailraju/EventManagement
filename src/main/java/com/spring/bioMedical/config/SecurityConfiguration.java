@@ -14,10 +14,7 @@ import org.springframework.security.provisioning.UserDetailsManager;
 
 import javax.sql.DataSource;
 
-/**
- * @author Soumyadip Chowdhury
- * @github soumyadip007
- */
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {

@@ -13,12 +13,6 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 
-/**
- * 
- * @author Soumyadip Chowdhury
- * @github soumyadip007
- *
- */
 @Configuration
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
  
@@ -30,14 +24,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
  
         if (roles.contains("ROLE_ADMIN")) {
             httpServletResponse.sendRedirect("/admin/events");
-//            httpServletResponse.sendRedirect("/admin/user-details");
         }
-        if (roles.contains("ROLE_DOCTOR")) {
-            httpServletResponse.sendRedirect("/doctor/index");
-        } 
-        if (roles.contains("ROLE_USER")) {
-            httpServletResponse.sendRedirect("/user/index");
-        } 
+
        
     }
 }

@@ -1,6 +1,6 @@
 package com.spring.bioMedical.payload;
 
-import com.spring.bioMedical.entity.User;
+import com.spring.bioMedical.entity.Admin;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +25,6 @@ public class Event {
     private Date modification;
     private int going;
     private int notGoing;
-    private User createdBy;
+    private Admin createdBy;
 
 }

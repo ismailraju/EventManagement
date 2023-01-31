@@ -18,9 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nulabinc.zxcvbn.Strength;
 import com.nulabinc.zxcvbn.Zxcvbn;
-import com.spring.bioMedical.entity.User;
 import com.spring.bioMedical.service.EmailService;
-import com.spring.bioMedical.service.UserService;
 
 /**
  * 

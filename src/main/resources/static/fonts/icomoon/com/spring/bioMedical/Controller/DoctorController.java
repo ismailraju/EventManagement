@@ -15,7 +15,6 @@ import com.spring.bioMedical.entity.Admin;
 import com.spring.bioMedical.entity.Appointment;
 import com.spring.bioMedical.service.AdminServiceImplementation;
 import com.spring.bioMedical.service.AppointmentServiceImplementation;
-import com.spring.bioMedical.service.UserService;
 
 /**
  * 

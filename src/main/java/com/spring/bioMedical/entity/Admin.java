@@ -53,9 +53,6 @@ public class Admin {
     @Column(name = "authority")
     private String role;
 
-    @Column(name = "lastseen")
-    @Transient
-    private String lastseen;
 
 
     @Transient

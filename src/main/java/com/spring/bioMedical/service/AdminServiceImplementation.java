@@ -31,7 +31,6 @@ public class AdminServiceImplementation implements AdminService {
 
     @Override
     public void save(Admin admin) {
-
         adminRepository.save(admin);
     }
 
@@ -46,7 +45,7 @@ public class AdminServiceImplementation implements AdminService {
     @Override
     public Admin findById(Integer id) {
 
-        Optional<Admin> optionalAdmin = adminRepository.findById(Long.valueOf(id));
+        Optional<Admin> optionalAdmin = adminRepository.findById(id);
         if (optionalAdmin.isPresent()) {
             return optionalAdmin.get();
         }
