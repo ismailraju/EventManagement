@@ -48,7 +48,8 @@ public class RegisterController {
 
 	public ModelAndView showRegistrationPage(ModelAndView modelAndView, User user){
 		modelAndView.addObject("user", user);
-		modelAndView.setViewName("register");
+//		modelAndView.setViewName("register");
+		modelAndView.setViewName("registation");
 		return modelAndView;
 	}
 	
@@ -63,17 +64,17 @@ public class RegisterController {
 		
 		if (userExists != null) {
 			modelAndView.addObject("alreadyRegisteredMessage", "Oops!  There is already a user registered with the email provided.");
-			modelAndView.setViewName("register");
+			modelAndView.setViewName("registation");
 			bindingResult.reject("email");
 		}
 			
 		if (bindingResult.hasErrors()) { 
-			modelAndView.setViewName("register");		
+			modelAndView.setViewName("registation");
 		} else { // new user so we create user and send confirmation e-mail
 					
 			// Disable user until they click on confirmation link in email
 		    
-			user.setEnabled(false);
+			user.setEnabled(true);
 			user.setRole("ROLE_USER");
 		      
 			
@@ -97,7 +98,7 @@ public class RegisterController {
 //			emailService.sendEmail(registrationEmail);
 			
 			modelAndView.addObject("confirmationMessage", "A confirmation e-mail has been sent to " + user.getEmail());
-			modelAndView.setViewName("register");
+			modelAndView.setViewName("registation");
 		}
 			
 		return modelAndView;

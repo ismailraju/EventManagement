@@ -1,142 +1,125 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:th="http://www.thymeleaf.org">
-
+      xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-  <meta charset="utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-<meta name="description" content="" />
-<meta name="author" content="" />
-<link rel="icon" href="favicon.ico" />
+    <title>Sign up</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>User Registration with Spring Boot</title>
+    <link th:href="@{/vendor/bootstrap/css/bootstrap.css}" rel="stylesheet"/>
+    <link th:href="@{/vendor/fontawesome-free/css/all.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/vendor/datatables/dataTables.bootstrap4.css}" rel="stylesheet"/>
+    <link th:href="@{/vendor/css/sb-admin.css}" rel="stylesheet"/>
 
-<!-- Bootstrap core CSS -->
-<link
-  href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-  rel="stylesheet"
-  integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-  crossorigin="anonymous" />
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" th:href="@{/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/login/fonts/Linearicons-Free-v1.0.0/icon-font.min.css}">
 
-	<link th:href="@{reg/css/style.css}" rel="stylesheet" />
+
 </head>
+<body>
 
-<body class="gray-bg">
+<div class="limiter">
+    <section class="vh-100" style="background-color: #eee;">
+        <div class="container h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-lg-12 col-xl-11">
+                    <div class="card text-black" style="border-radius: 25px;">
+                        <div class="card-body p-md-5">
+                            <div class="row justify-content-center">
+                                <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
-  <div class="middle-box text-center loginscreen animated fadeInDown">
-    <div  class="container-login100">
-      
-      <hr />
+                                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
 
-      <h4>User Registration</h4>
-
-      <form autocomplete="off" action="#" th:action="@{/register}"
-        th:object="${user}" method="post" class="m-t" role="form"
-        data-toggle="validator">
-
-		
-        <div th:if="${confirmationMessage}" class="alert alert-success"
-          role="alert" th:text=${confirmationMessage}></div>
-
-        <div th:if="${alreadyRegisteredMessage}"
-          class="alert alert-danger" role="alert"
-          th:text="${alreadyRegisteredMessage}"></div>
+                                    <div th:if="${confirmationMessage}" class="alert alert-success"
+                                         role="alert" th:text=${confirmationMessage}></div>
+                                    <form class="mx-1 mx-md-4" autocomplete="off" action="#" th:action="@{/register}"
+                                          th:object="${user}" method="post" role="form"
+                                          data-toggle="validator">
 
 
-        <div th:if="${#fields.hasErrors('firstName')}"
-          th:errors="*{firstName}"
-          class="validation-message alert alert-danger" role="alert"></div>
+                                        <div class="d-flex flex-row align-items-center mb-4">
+                                            <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                                            <div class="form-outline flex-fill mb-0">
 
-        <div th:if="${#fields.hasErrors('lastName')}"
-          th:errors="*{lastName}"
-          class="validation-message alert alert-danger" role="alert"></div>
+                                                <div th:if="${#fields.hasErrors('email')}"
+                                                     th:errors="*{email}"
+                                                     class="validation-message alert alert-danger form-control"
+                                                     role="alert"></div>
 
- 
+                                                <input type="email" th:field="*{email}"
+                                                       placeholder="Email Address" class="form-control"
+                                                       data-error="This email address is invalid" required />
+<!--                                                <input type="email" id="form3Example3c" class="form-control"/>-->
+                                                <label class="form-label" for="form3Example3c">Email / Username</label>
+                                            </div>
+                                        </div>
 
-        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
-          class="validation-message alert alert-danger" role="alert"></div>
-
-        <div th:if="${#fields.hasErrors('password')}"
-          th:errors="*{password}"
-          class="validation-message alert alert-danger" role="alert"></div>
 
 
-        <div class="form-group input-group has-feedback">
-          <label th:if="${#fields.hasErrors('firstName')}"
-            th:errors="*{firstName}" class="validation-message"></label>
-          <span class="input-group-addon">
-            <span class="glyphicon glyphicon-user"></span>
-          </span>
-          
-          <input type="text" th:field="*{firstName}"
-            placeholder="First Name" class="form-control" required />
-          <span class="glyphicon form-control-feedback"
-            aria-hidden="true"></span>
+
+                                        <div class="d-flex flex-row align-items-center mb-4">
+                                            <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                                            <div class="form-outline flex-fill mb-0">
+                                                <div th:if="${#fields.hasErrors('password')}"
+                                                     th:errors="*{password}"
+                                                     class="validation-message alert alert-danger form-control"
+                                                     role="alert"></div>
+
+                                                <input type="password" th:field="*{password}"
+                                                       placeholder="Password" class="form-control"
+                                                       data-error="This password is invalid" required />
+<!--                                                <input type="password" id="form3Example4c" class="form-control"/>-->
+                                                <label class="form-label" for="form3Example4c">Password</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex flex-row align-items-center mb-4">
+                                            <i class="fas fa-key fa-lg me-3 fa-fw"></i>
+                                            <div class="form-outline flex-fill mb-0">
+                                                <input type="password" id="form3Example4cd" class="form-control"/>
+                                                <label class="form-label" for="form3Example4cd">Repeat your
+                                                    password</label>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                            <button type="submit"
+                                                    class="btn btn-primary block full-width m-b">Register</button>
+                                        </div>
+
+                                    </form>
+                                    <span>Already have an account?<a class="txt1 bo1 hov1"
+                                                                     th:href="@{/showMyLoginPage}">
+							Log-in
+						</a></span>
+                                </div>
+                                <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+
+                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
+                                         class="img-fluid" alt="Sample image">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div class="form-group input-group has-feedback">
-          <span class="input-group-addon">
-            <span class="glyphicon glyphicon-user"></span>
-          </span>
-          <input type="text" th:field="*{lastName}"
-            placeholder="Last Name" class="form-control" required />
-          <span class="glyphicon form-control-feedback"
-            aria-hidden="true"></span>
-        </div>
-
-        <div class="form-group input-group has-feedback">
-          <span class="input-group-addon">
-            <span class="glyphicon glyphicon-envelope"></span>
-          </span>
-          <input type="email" th:field="*{email}"
-            placeholder="Email Address" class="form-control"
-            data-error="This email address is invalid" required />
-          <span class="glyphicon form-control-feedback"
-            aria-hidden="true"></span>
-
-        </div>
-        
-        
-         <div class="form-group input-group has-feedback">
-          
-          <input type="radio" 
-          class="form-control" th:field="*{gender}" th:value="Male" /> Male<br>
-            <input type="radio" 
-          class="form-control" th:field="*{gender}" th:value="Female" /> Female<br>
-    
-        </div>
-
-        <button type="submit"
-          class="btn btn-primary block full-width m-b">Register</button>
-
-      </form>
-     
-     <span>Already have an account?<a class="txt1 bo1 hov1" th:href="@{/showMyLoginPage}">
-							Log-in						
-						</a></span> 
-       <p class="m-t">
-      
-      </p>
-    </div>
-  </div>
+    </section>
+</div>
 
 
-  <!-- jQuery-->
-  <script
-    src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!--===============================================================================================-->
+<script src="login/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="login/vendor/bootstrap/js/popper.js"></script>
+<script src="login/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="login/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="login/js/main.js"></script>
 
-  <!-- Bootstrap -->
-  <script
-    src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-    crossorigin="anonymous"></script>
-
-  <!-- Bootstrap Validator plugin -->
-  <script src="//cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
-
- 
 </body>
-
 </html>

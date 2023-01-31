@@ -25,6 +25,7 @@
     <!-- Custom styles for this template-->
     <link th:href="@{/vendor/css/sb-admin.css}" rel="stylesheet">
 
+
 </head>
 
 
@@ -42,14 +43,14 @@
         <div class="container-fluid">
 
 
-<!--          Event details card  -->
+            <!--          Event details card  -->
 
             <div class="card mb-3">
                 <div class="card-header">
 
                 </div>
                 <div class="card-body">
-
+                    <input type="hidden" th:value="${event.id}" id="eventId">
 
                     <div class="row">
                         <div class="col-sm-6">
@@ -107,11 +108,32 @@
                             <div class="row form-group">
                                 <i class="fa fa-user myicon" aria-hidden="true"></i>
 
-                                <div th:text="${ event.going}"></div>
+                                <div th:text="${event.going}"></div>
                             </div>
 
                         </div>
 
+                        <div class="col-sm-6">
+
+                            <div class="row form-group">
+                                <span class="align-middle">
+                                <div class="background">
+                                    <center>
+                                        <h5>
+                                            <div id="sharablelink">
+
+                                            </div>
+                                        </h5>
+                                        <button class="clipboard">Copy Sharable Link</button>
+                                        <p></p>
+                                    </center>
+                                </div>
+                                     </span>
+
+                            </div>
+
+
+                        </div>
                     </div>
 
 
@@ -120,13 +142,7 @@
             </div>
 
 
-
-
-
-
-
-
-<!--  particilant card-->
+            <!--  particilant card-->
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
@@ -172,7 +188,7 @@
             <footer class="sticky-footer">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright ©Soumyadip Spring-Boot-JPA 2019</span>
+                        <span>Copyright </span>
                     </div>
                 </div>
             </footer>
@@ -230,12 +246,30 @@
 
     <!-- Custom scripts for all pages-->
     <script th:src="@{/vendor/js/sb-admin.min.js}"></script>
-
+    <!--    <script src="https://clipboardjs.com/dist/clipboard.min.js"></script>-->
 
     <script>
 
         $(document).ready(function () {
             $('#participantsdataTable').DataTable();
+
+
+            var $temp = $("<input>");
+            var $url = $(location).attr('href');
+            var eventId = $("#eventId").val();
+            var currentUrl = new URL($url);
+            var port = location.port || (location.protocol === 'https:' ? '443' : '80');
+            var sharablelink = location.protocol + '//' + currentUrl.hostname + ":" + port + "/public/" + eventId;
+            $("#sharablelink").text(sharablelink);
+
+            $('.clipboard').on('click', function () {
+                $("body").append($temp);
+                $temp.val(sharablelink).select();
+                document.execCommand("copy");
+                $temp.remove();
+                $("p").text("URL copied!");
+            })
+
         });
 
     </script>
@@ -247,7 +281,28 @@
             padding: 2px;
         }
 
+        .clipboard {
+            border: 0;
+            padding: 15px;
+            border-radius: 3px;
+            background-image: linear-gradient(135deg, #FDEB71 10%, #F8D800 100%);
+            cursor: pointer;
+            color: #04048c;
+            font-family: 'Karla', sans-serif;
+            font-size: 16px;
+            position: relative;
+            top: 0;
+            transition: all .2s ease;
+
+        &
+        :hover {
+            top: 2px;
+        }
+
+        }
+
     </style>
+
 
 </body>
 
