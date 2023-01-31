@@ -4,6 +4,7 @@ import com.spring.bioMedical.entity.Event;
 import com.spring.bioMedical.entity.Participant;
 import com.spring.bioMedical.repository.ParticipantRepository;
 import com.spring.bioMedical.service.EventService;
+import com.spring.bioMedical.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +16,7 @@ import java.util.Date;
 @Controller
 @Slf4j
 @RequestMapping("/public")
-public class PublicController {
+public class PublicController extends Utils {
 
 
     private final EventService eventService;
@@ -55,30 +56,10 @@ public class PublicController {
 
         theModel.addAttribute("event", event);
         theModel.addAttribute("participant", participant);
-        theModel.addAttribute("eventtime", getEventTime(event.getStart(), event.getEnd()));
+        theModel.addAttribute("eventtime", Utils.getEventTime(event.getStart(), event.getEnd()));
 
         return "admin/eventDetails";
     }
 
-    String[] getEventTime(Date start, Date end) {
-
-        String ans = "";
-        String pattern = "MMM-dd-yyyy-E-hh:mm a";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        String startDateStr = simpleDateFormat.format(start);
-        String[] startSplit = startDateStr.split("-");
-
-        String endDateStr = simpleDateFormat.format(end);
-        String[] endSplit = endDateStr.split("-");
-
-        for (int i = 0; i < startSplit.length; i++) {
-            if (!startSplit[i].equals(endSplit[i])) {
-                startSplit[i] += " - " + endSplit[i];
-            }
-        }
-
-
-        return startSplit;
-    }
 
 }

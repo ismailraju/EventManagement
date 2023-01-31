@@ -20,7 +20,7 @@ public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @Column(name = "username", nullable = false, unique = true)
     @Email(message = "Please provide a valid e-mail")
@@ -30,6 +30,7 @@ public class Admin {
     @Column(name = "password")
     @Transient
     private String password;
+
 
     @Column(name = "first_name")
     @NotEmpty(message = "Please provide your first name")
@@ -56,5 +57,8 @@ public class Admin {
     @Transient
     private String lastseen;
 
+
+    @Transient
+    private String password2;
 
 }

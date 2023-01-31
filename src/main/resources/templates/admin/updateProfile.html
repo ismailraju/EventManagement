@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <link rel="icon" type="../vendor/image/png" href="Error/pic.jpg"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Admin Details</title>
+
+
+    <!-- Bootstrap core CSS-->
+    <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+
+    <!-- Custom fonts for this template-->
+    <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
+
+    <!-- Page level plugin CSS-->
+    <link th:href="@{/vendor/datatables/dataTables.bootstrap4.css}" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link th:href="@{/vendor/css/sb-admin.css}" rel="stylesheet">
+
+</head>
+
+
+<body id="page-top">
+
+<th:block th:include="layout/header"></th:block>
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <th:block th:include="layout/sidebar"></th:block>
+
+    <div id="content-wrapper">
+
+        <div class="container-fluid">
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fas fa-table"></i>
+                    User Details
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <form th:action="@{/admin/update}" th:object="${profile}" method="POST">
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <input type="hidden" th:field="*{id}">
+
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="col-sm-3 " for="email">UserName (Email) :</label>
+                                                <input type="text" th:field="*{email}" class="form-control col-sm-9"
+                                                       required=""
+                                                       placeholder="User Name(Email)">
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input class="float-right btn btn-primary btn-lg col-sm-3 " type="submit"
+                                                   value="Update Username">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </form>
+                        </div>
+                        <div class="col-sm-6">
+                            <form th:action="@{/admin/updatePassword}" th:object="${profile}" method="POST">
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <input type="hidden" th:field="*{id}">
+
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="col-sm-3 " for="password">New Password :</label>
+                                                <input type="password" th:field="*{password}" class="form-control col-sm-9"
+                                                       required=""
+                                                       placeholder="New Password">
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="col-sm-3 " for="password2">Retype Password :</label>
+                                                <input type="password" th:field="*{password2}" class="form-control col-sm-9"
+                                                       required=""
+                                                       placeholder="Retype Password">
+
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <input class="float-right btn btn-primary btn-lg col-sm-3 " type="submit"
+                                                   value="Update Password">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-footer small text-muted"></div>
+            </div>
+        </div>
+        <!-- /.content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+
+    <!-- /.content-wrapper -->
+
+</div>
+
+<!-- Logout Modal-->
+
+
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+
+                <form th:action="@{/logout}" method="POST">
+
+
+                    <button type="submit" class="btn btn-success">Logout</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Bootstrap core JavaScript-->
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- Core plugin JavaScript-->
+<script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
+
+<!-- Page level plugin JavaScript-->
+<script th:src="@{/vendor/chart.js/Chart.min.js}"></script>
+<script th:src="@{/vendor/datatables/jquery.dataTables.js}"></script>
+<script th:src="@{/vendor/datatables/dataTables.bootstrap4.js}"></script>
+
+<!-- Custom scripts for all pages-->
+<script th:src="@{/vendor/js/sb-admin.min.js}"></script>
+
+</body>
+
+</html>

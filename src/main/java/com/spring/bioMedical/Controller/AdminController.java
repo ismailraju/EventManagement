@@ -3,10 +3,13 @@ package com.spring.bioMedical.Controller;
 import com.spring.bioMedical.entity.Admin;
 import com.spring.bioMedical.entity.Appointment;
 import com.spring.bioMedical.entity.Event;
+import com.spring.bioMedical.entity.Participant;
+import com.spring.bioMedical.repository.ParticipantRepository;
 import com.spring.bioMedical.service.AdminServiceImplementation;
 import com.spring.bioMedical.service.AppointmentServiceImplementation;
 import com.spring.bioMedical.service.EventService;
 import com.spring.bioMedical.service.UserService;
+import com.spring.bioMedical.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,14 +36,17 @@ public class AdminController {
 
     private final AppointmentServiceImplementation appointmentServiceImplementation;
 
+    private final ParticipantRepository participantRepository;
+
 
     @Autowired
     public AdminController(EventService eventService, UserService userService, AdminServiceImplementation obj,
-                           AppointmentServiceImplementation app) {
+                           AppointmentServiceImplementation app, ParticipantRepository participantRepository) {
         this.eventService = eventService;
         this.userService = userService;
         adminServiceImplementation = obj;
         appointmentServiceImplementation = app;
+        this.participantRepository = participantRepository;
     }
 
 
@@ -316,7 +322,8 @@ public class AdminController {
 
         theModel.addAttribute("profile", admin);
 
-        return "admin/updateMyProfile";
+//        return "admin/updateMyProfile";
+        return "admin/updateProfile";
     }
 
 
@@ -325,8 +332,23 @@ public class AdminController {
 
 
         System.out.println(admin);
+        Admin adminOld = adminServiceImplementation.findById(admin.getId());
 
-        adminServiceImplementation.save(admin);
+        adminOld.setEmail(admin.getEmail());
+        adminServiceImplementation.save(adminOld);
+
+        // use a redirect to prevent duplicate submissions
+        return "redirect:/admin/user-details";
+    }
+
+    @PostMapping("/updatePassword")
+    public String updatePassword(@ModelAttribute("profile") Admin admin) {
+
+        System.out.println(admin);
+        Admin adminOld = adminServiceImplementation.findById( admin.getId() );
+
+        adminOld.setPassword(admin.getPassword());
+        adminServiceImplementation.save(adminOld);
 
         // use a redirect to prevent duplicate submissions
         return "redirect:/admin/user-details";
@@ -376,8 +398,27 @@ public class AdminController {
 
     @GetMapping("/create-event")
     public String EventForm(Model theModel) {
+
+
+        String username = "";
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+            String Pass = ((UserDetails) principal).getPassword();
+            System.out.println("One + " + username + "   " + Pass);
+
+
+        } else {
+            username = principal.toString();
+            System.out.println("Two + " + username);
+        }
+
+        Admin admin = adminServiceImplementation.findByEmail(username);
+
+
         Event event = new Event();
         theModel.addAttribute("event", event);
+        theModel.addAttribute("adminId", admin.getId());
         return "admin/createEvent";
     }
 
@@ -446,9 +487,14 @@ public class AdminController {
 
         Event event = eventService.findById(id);
 
-        theModel.addAttribute("event", event);
 
-        return "admin/eventDetails";
+        List<Participant> participants = participantRepository.findAllByEvent(event);
+        theModel.addAttribute("event", event);
+        theModel.addAttribute("participants", participants);
+
+        theModel.addAttribute("eventtime", Utils.getEventTime(event.getStart(), event.getEnd()));
+
+        return "admin/eventAdmin";
     }
 
 
