@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Login</title>
+    <title>[[${event.title}]]</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -85,7 +85,6 @@
 
                         <div class="row form-group">
                             <i class="fa fa-user myicon" aria-hidden="true"></i>
-
                             <div th:text="${ event.going}"></div>
                         </div>
 
@@ -101,13 +100,20 @@
                             </div>
                             <div class="form-group">
                                 <label for="email">Email:</label>
-                                <input type="text" th:field="*{email}" class="form-control">
+                                <input type="email" th:field="*{email}" class="form-control">
                             </div>
 
                             <input hidden type="number" th:field="*{event.id}">
 
-                            <button type="submit" class="btn btn-info col-2">Register</button>
+                            <button type="submit" class="btn btn-info col-2">Registration</button>
+
+
                         </form>
+
+                        <div class="form-group">
+                            <div th:if="${confirmationMessage}" class="alert alert-success"
+                                 th:text="${confirmationMessage}"></div>
+                        </div>
                     </div>
                 </div>
 

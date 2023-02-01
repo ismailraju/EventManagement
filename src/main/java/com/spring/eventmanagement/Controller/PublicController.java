@@ -53,6 +53,7 @@ public class PublicController extends Utils {
         participant.setEvent(event);
 
 
+        theModel.addAttribute("confirmationMessage", "You are Registerd For this Event.");
         theModel.addAttribute("event", event);
         theModel.addAttribute("participant", participant);
         theModel.addAttribute("eventtime", Utils.getEventTime(event.getStart(), event.getEnd()));

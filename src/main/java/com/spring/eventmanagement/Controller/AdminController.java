@@ -44,7 +44,6 @@ public class AdminController {
     }
 
 
-
     @GetMapping("/profile")
     public String EditForm(Model theModel) {
 
@@ -53,13 +52,10 @@ public class AdminController {
         if (principal instanceof UserDetails) {
             username = ((UserDetails) principal).getUsername();
             String Pass = ((UserDetails) principal).getPassword();
-            System.out.println("One + " + username + "   " + Pass);
         } else {
             username = principal.toString();
-            System.out.println("Two + " + username);
         }
 
-        // get the employee from the service
 
         Admin admin = adminService.findByEmail(username);
 
@@ -81,20 +77,31 @@ public class AdminController {
     public String update(@ModelAttribute("profile") Admin admin, Model model) {
 
 
+        Long userExists = adminService.countByEmailAndIdNot(admin.getEmail(), admin.getId());
+
+        System.out.println(userExists);
+
+        if (userExists > 0L) {
+            model.addAttribute("confirmationMessageEmail", "Oops!  There is already a user registered with the email provided.");
+            return EditForm(model);
+        }
+
+
         System.out.println(admin);
         Admin adminOld = adminService.findById(admin.getId());
 
         adminOld.setEmail(admin.getEmail());
         adminService.save(adminOld);
 
-        model.addAttribute("confirmationMessage",
+        model.addAttribute("confirmationMessageEmail",
                 "e-mail address updated." + admin.getEmail());
 
-        return "redirect:/admin/profile";
+//        return "redirect:/admin/profile";
+        return EditForm(model);
     }
 
     @PostMapping("/updatePassword")
-    public String updatePassword(@ModelAttribute("profile") Admin admin) {
+    public String updatePassword(@ModelAttribute("profile") Admin admin, Model model) {
 
         System.out.println(admin);
         Admin adminOld = adminService.findById(admin.getId());
@@ -102,26 +109,25 @@ public class AdminController {
         adminOld.setPassword(admin.getPassword());
         adminService.save(adminOld);
 
-
-        return "redirect:/admin/profile";
+        model.addAttribute("confirmationMessagePassword",
+                "Password updated.");
+//        return "redirect:/admin/profile";
+        return EditForm(model);
     }
 
 
     @GetMapping("/create-event")
     public String EventForm(Model theModel) {
 
-
         String username = "";
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
             username = ((UserDetails) principal).getUsername();
             String Pass = ((UserDetails) principal).getPassword();
-            System.out.println("One + " + username + "   " + Pass);
 
 
         } else {
             username = principal.toString();
-            System.out.println("Two + " + username);
         }
 
         Admin admin = adminService.findByEmail(username);

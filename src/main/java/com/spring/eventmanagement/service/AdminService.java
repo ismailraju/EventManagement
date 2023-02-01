@@ -36,6 +36,12 @@ public class AdminService {
 
     }
 
+    public Long countByEmailAndIdNot(String email,Integer id) {
+
+        return adminRepository.findByEmailAndIdNot(email,id);
+
+    }
+
     public Admin findById(Integer id) {
 
         Optional<Admin> optionalAdmin = adminRepository.findById(id);

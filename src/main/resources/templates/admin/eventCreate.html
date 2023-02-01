@@ -377,6 +377,40 @@
             return valid;
         }
 
+
+        function updateEvent(event) {
+            var valid = true;
+
+            eventData = {
+                id: event.id,
+                title: event.title,
+                start: event.start,
+                end: event.end,
+                description: event.description,
+                location: event.location,
+                createdBy: {
+                    id: adminId
+                }
+            };
+
+
+            $.ajax({
+                type: "PATCH",
+                url: "/event",
+                data: JSON.stringify(eventData),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    // $('#calendar').fullCalendar('refetchEvents');
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+
+            return valid;
+        }
+
         function addEvent(start, end) {
 
             debugger;
@@ -501,10 +535,20 @@
 
                     //$('#calendar').fullCalendar('updateEvent', event);
                 },
+
                 eventMouseover: function (event, jsEvent, view) {
 
                 },
                 eventMouseout: function (event, jsEvent, view) {
+                },
+
+                eventDrop: function (event) {
+                    updateEvent(event);
+                    // alert(event);
+                },
+                eventResize: function (event) {
+                    updateEvent(event);
+                    // alert(event)
                 },
                 loading: function (bool) {
                     $('#loading').toggle(bool);
