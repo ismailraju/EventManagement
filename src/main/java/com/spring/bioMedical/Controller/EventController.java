@@ -4,7 +4,7 @@ import com.spring.bioMedical.entity.Admin;
 import com.spring.bioMedical.entity.Event;
 import com.spring.bioMedical.repository.AdminRepository;
 import com.spring.bioMedical.repository.EventRepository;
-import com.spring.bioMedical.service.AdminServiceImplementation;
+import com.spring.bioMedical.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,7 +23,7 @@ class EventController {
     @Autowired
     private EventRepository eventRepository;
     @Autowired
-    private AdminServiceImplementation adminService;
+    private AdminService adminService;
     @Autowired
     private AdminRepository adminRepository;
 
@@ -33,10 +33,16 @@ class EventController {
         return eventRepository.findAll();
     }
 
+
+    @RequestMapping(value = "/allevents/{adminId}", method = RequestMethod.GET)
+    public List<Event> allEventsAdmin(@PathVariable("adminId") Integer adminId) {
+        return eventRepository.findAllByCreatedBy(Admin.builder().id(adminId).build());
+    }
+
     @RequestMapping(value = "/event", method = RequestMethod.POST)
     public Event addEvent(@RequestBody Event event) {
         event.setCreation(new Date());
-        Admin admin = adminRepository.findByEmail("raju");
+        Admin admin = adminService.findById(event.getCreatedBy().getId());
         event.setCreatedBy(admin);
 //        event.setCreatedBy(getLoginUser());
 
@@ -86,13 +92,33 @@ class EventController {
             throw new BadDateFormatException("bad end date: " + end);
         }
 
-//        LocalDateTime startDateTime = LocalDateTime.ofInstant(startDate.toInstant(),
-//                ZoneId.systemDefault());
-//
-//        LocalDateTime endDateTime = LocalDateTime.ofInstant(endDate.toInstant(),
-//                ZoneId.systemDefault());
 
         return eventRepository.findByDateBetween(startDate, endDate);
+    }
+
+    @RequestMapping(value = "/events/{adminId}", method = RequestMethod.GET)
+    public List<Event> getEventsInRangeAdmin(
+            @PathVariable( "adminId") Integer adminId,
+            @RequestParam(value = "start", required = true) String start,
+            @RequestParam(value = "end", required = true) String end) {
+        Date startDate = null;
+        Date endDate = null;
+        SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            startDate = inputDateFormat.parse(start);
+        } catch (ParseException e) {
+            throw new BadDateFormatException("bad start date: " + start);
+        }
+
+        try {
+            endDate = inputDateFormat.parse(end);
+        } catch (ParseException e) {
+            throw new BadDateFormatException("bad end date: " + end);
+        }
+
+
+        return eventRepository.findByDateBetween(startDate, endDate, adminId);
     }
 
     public Admin getLoginUser() {

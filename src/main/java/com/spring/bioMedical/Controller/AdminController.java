@@ -4,7 +4,7 @@ import com.spring.bioMedical.entity.Admin;
 import com.spring.bioMedical.entity.Event;
 import com.spring.bioMedical.entity.Participant;
 import com.spring.bioMedical.repository.ParticipantRepository;
-import com.spring.bioMedical.service.AdminServiceImplementation;
+import com.spring.bioMedical.service.AdminService;
 import com.spring.bioMedical.service.EventService;
 import com.spring.bioMedical.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,24 +28,24 @@ public class AdminController {
 
     private final EventService eventService;
 
-    private final AdminServiceImplementation adminServiceImplementation;
+    private final AdminService adminService;
 
 
     private final ParticipantRepository participantRepository;
 
 
     @Autowired
-    public AdminController(EventService eventService, AdminServiceImplementation obj,
+    public AdminController(EventService eventService, AdminService obj,
                            ParticipantRepository participantRepository) {
         this.eventService = eventService;
-        adminServiceImplementation = obj;
+        adminService = obj;
 
         this.participantRepository = participantRepository;
     }
 
 
 
-    @GetMapping("/edit-my-profile")
+    @GetMapping("/profile")
     public String EditForm(Model theModel) {
 
         String username = "";
@@ -61,12 +61,12 @@ public class AdminController {
 
         // get the employee from the service
 
-        Admin admin = adminServiceImplementation.findByEmail(username);
+        Admin admin = adminService.findByEmail(username);
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date now = new Date();
 
-        adminServiceImplementation.save(admin);
+        adminService.save(admin);
 
         System.out.println(admin);
 
@@ -82,25 +82,25 @@ public class AdminController {
 
 
         System.out.println(admin);
-        Admin adminOld = adminServiceImplementation.findById(admin.getId());
+        Admin adminOld = adminService.findById(admin.getId());
 
         adminOld.setEmail(admin.getEmail());
-        adminServiceImplementation.save(adminOld);
+        adminService.save(adminOld);
 
         model.addAttribute("confirmationMessage",
                 "e-mail address updated." + admin.getEmail());
 
-        return "redirect:/admin/edit-my-profile";
+        return "redirect:/admin/profile";
     }
 
     @PostMapping("/updatePassword")
     public String updatePassword(@ModelAttribute("profile") Admin admin) {
 
         System.out.println(admin);
-        Admin adminOld = adminServiceImplementation.findById(admin.getId());
+        Admin adminOld = adminService.findById(admin.getId());
 
         adminOld.setPassword(admin.getPassword());
-        adminServiceImplementation.save(adminOld);
+        adminService.save(adminOld);
 
         // use a redirect to prevent duplicate submissions
         return "redirect:/admin/user-details";
@@ -124,7 +124,7 @@ public class AdminController {
             System.out.println("Two + " + username);
         }
 
-        Admin admin = adminServiceImplementation.findByEmail(username);
+        Admin admin = adminService.findByEmail(username);
 
 
         Event event = new Event();
@@ -154,7 +154,7 @@ public class AdminController {
             System.out.println("Two + " + username);
         }
 
-        Admin admin = adminServiceImplementation.findByEmail(username);
+        Admin admin = adminService.findByEmail(username);
 
         System.out.println(admin);
         event.setCreatedBy(admin);
@@ -183,7 +183,7 @@ public class AdminController {
             System.out.println("Two + " + username);
         }
 
-        Admin admin = adminServiceImplementation.findByEmail(username);
+        Admin admin = adminService.findByEmail(username);
 
         List<Event> events = eventService.findAllByCreatedBy(admin);
         model.addAttribute("events", events);

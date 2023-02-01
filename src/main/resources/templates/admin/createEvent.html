@@ -243,7 +243,7 @@
 
 
 <script>
-
+    var adminId = [[${adminId}]];
 
     $(function () {
         var dialog, form,
@@ -287,7 +287,10 @@
                     title: modtitle.value,
                     start: eventStart,
                     end: eventEnd,
-                    description: moddescription.value
+                    description: moddescription.value,
+                    createdBy: {
+                        id: adminId
+                    }
                 };
 
                 editDialog.dialog("close");
@@ -345,7 +348,10 @@
                     start: eventStart,
                     end: eventEnd,
                     description: moddescription.value,
-                    location: modlocation.value
+                    location: modlocation.value,
+                    createdBy: {
+                        id: adminId
+                    }
                 };
                 //		alert(eventData.title.value + " " + eventData.start.value + " " + eventData.end.value)
                 // $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
@@ -392,6 +398,9 @@
                     location: newlocation.value,
                     start: eventStart,
                     end: eventEnd,
+                    createdBy: {
+                        id: adminId
+                    }
                 };
                 //$('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
                 // }
@@ -471,7 +480,7 @@
                 editable: true,
                 eventLimit: true, // allow "more" link when too many events
                 events: {
-                    url: '/allevents',
+                    url: '/allevents/' + adminId,
                     type: 'GET',
                     error: function () {
                         alert('there was an error while fetching events!');

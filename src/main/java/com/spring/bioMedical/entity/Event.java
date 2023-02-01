@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 import java.util.Date;
 
 
@@ -18,7 +19,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Event {
+public class Event  implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

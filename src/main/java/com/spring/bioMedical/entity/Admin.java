@@ -9,7 +9,7 @@ import javax.validation.constraints.NotEmpty;
 
 
 @Entity
-@Table(name = "user")
+@Table(name = "admin")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -54,8 +54,7 @@ public class Admin {
     private String role;
 
 
-
-    @Transient
+    @javax.persistence.Transient
     private String password2;
 
 }
