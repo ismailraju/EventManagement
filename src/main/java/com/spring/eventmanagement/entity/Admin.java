@@ -1,4 +1,4 @@
-package com.spring.bioMedical.entity;
+package com.spring.eventmanagement.entity;
 
 import lombok.*;
 import org.springframework.data.annotation.Transient;

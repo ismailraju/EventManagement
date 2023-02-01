@@ -1,16 +1,15 @@
-package com.spring.bioMedical.Controller;
+package com.spring.eventmanagement.Controller;
 
-import com.spring.bioMedical.entity.Event;
-import com.spring.bioMedical.entity.Participant;
-import com.spring.bioMedical.repository.ParticipantRepository;
-import com.spring.bioMedical.service.EventService;
-import com.spring.bioMedical.utils.Utils;
+import com.spring.eventmanagement.entity.Event;
+import com.spring.eventmanagement.entity.Participant;
+import com.spring.eventmanagement.repository.ParticipantRepository;
+import com.spring.eventmanagement.service.EventService;
+import com.spring.eventmanagement.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Controller

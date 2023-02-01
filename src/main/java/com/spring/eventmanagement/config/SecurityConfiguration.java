@@ -1,4 +1,4 @@
-package com.spring.bioMedical.config;
+package com.spring.eventmanagement.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,12 +29,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-        // use jdbc authentication ... oh yeah!!!
         auth.jdbcAuthentication().dataSource(securityDataSource)
                 .usersByUsernameQuery(
-                        "select username,password,enabled from user where username=?")
+                        "select username,password,enabled from admin where username=?")
                 .authoritiesByUsernameQuery(
-                        "select username, authority from user where username=?")
+                        "select username, authority from admin where username=?")
                 .passwordEncoder(passwordEncoder());
     }
 
@@ -64,7 +63,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/showMyLoginPage")
-                .loginProcessingUrl("/authenticateTheUser")
+                .loginProcessingUrl("/authenticateUser")
                 //.defaultSuccessUrl("/register")
                 .permitAll()
                 .successHandler(successHandler)
@@ -87,7 +86,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/Image/**"
         );
 
-        //logoutSuccessUrl("/customLogout")
     }
 
 
@@ -104,14 +102,3 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 }
 
-class PasswordEnconderTest implements PasswordEncoder {
-    @Override
-    public String encode(CharSequence charSequence) {
-        return charSequence.toString();
-    }
-
-    @Override
-    public boolean matches(CharSequence charSequence, String s) {
-        return charSequence.toString().equals(s);
-    }
-}

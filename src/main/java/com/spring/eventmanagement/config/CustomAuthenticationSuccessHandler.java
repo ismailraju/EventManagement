@@ -1,4 +1,4 @@
-package com.spring.bioMedical.config;
+package com.spring.eventmanagement.config;
 
 import java.io.IOException;
 import java.util.Set;

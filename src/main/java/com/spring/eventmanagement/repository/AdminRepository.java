@@ -1,6 +1,6 @@
-package com.spring.bioMedical.repository;
+package com.spring.eventmanagement.repository;
 
-import com.spring.bioMedical.entity.Admin;
+import com.spring.eventmanagement.entity.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

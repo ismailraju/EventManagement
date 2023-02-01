@@ -1,6 +1,6 @@
-package com.spring.bioMedical.payload;
+package com.spring.eventmanagement.payload;
 
-import com.spring.bioMedical.entity.Admin;
+import com.spring.eventmanagement.entity.Admin;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

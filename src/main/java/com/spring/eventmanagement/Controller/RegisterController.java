@@ -1,12 +1,12 @@
-package com.spring.bioMedical.Controller;
+package com.spring.eventmanagement.Controller;
 
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import com.spring.bioMedical.entity.Admin;
-import com.spring.bioMedical.service.AdminService;
+import com.spring.eventmanagement.entity.Admin;
+import com.spring.eventmanagement.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;

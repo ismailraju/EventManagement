@@ -1,4 +1,4 @@
-package com.spring.bioMedical.service;
+package com.spring.eventmanagement.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.spring.bioMedical.entity.Admin;
-import com.spring.bioMedical.repository.AdminRepository;
+import com.spring.eventmanagement.entity.Admin;
+import com.spring.eventmanagement.repository.AdminRepository;
 
 
 @Service

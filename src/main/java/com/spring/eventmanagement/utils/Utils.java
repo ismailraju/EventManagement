@@ -1,4 +1,4 @@
-package com.spring.bioMedical.utils;
+package com.spring.eventmanagement.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

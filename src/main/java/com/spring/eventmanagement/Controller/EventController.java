@@ -1,12 +1,11 @@
-package com.spring.bioMedical.Controller;
+package com.spring.eventmanagement.Controller;
 
-import com.spring.bioMedical.entity.Admin;
-import com.spring.bioMedical.entity.Event;
-import com.spring.bioMedical.repository.AdminRepository;
-import com.spring.bioMedical.repository.EventRepository;
-import com.spring.bioMedical.service.AdminService;
+import com.spring.eventmanagement.entity.Admin;
+import com.spring.eventmanagement.entity.Event;
+import com.spring.eventmanagement.repository.AdminRepository;
+import com.spring.eventmanagement.repository.EventRepository;
+import com.spring.eventmanagement.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -140,11 +139,3 @@ class EventController {
     }
 }
 
-@ResponseStatus(HttpStatus.BAD_REQUEST)
-class BadDateFormatException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
-
-    public BadDateFormatException(String dateString) {
-        super(dateString);
-    }
-}

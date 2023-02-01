@@ -1,8 +1,8 @@
-package com.spring.bioMedical.service;
+package com.spring.eventmanagement.service;
 
-import com.spring.bioMedical.entity.Admin;
-import com.spring.bioMedical.entity.Event;
-import com.spring.bioMedical.repository.EventRepository;
+import com.spring.eventmanagement.entity.Admin;
+import com.spring.eventmanagement.entity.Event;
+import com.spring.eventmanagement.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

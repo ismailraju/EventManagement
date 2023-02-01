@@ -1,7 +1,7 @@
-package com.spring.bioMedical.repository;
+package com.spring.eventmanagement.repository;
 
-import com.spring.bioMedical.entity.Event;
-import com.spring.bioMedical.entity.Participant;
+import com.spring.eventmanagement.entity.Event;
+import com.spring.eventmanagement.entity.Participant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

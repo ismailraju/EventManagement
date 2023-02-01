@@ -1,6 +1,6 @@
-package com.spring.bioMedical.entity;
+package com.spring.eventmanagement.entity;
 
-import com.spring.bioMedical.utils.Status;
+import com.spring.eventmanagement.utils.Status;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

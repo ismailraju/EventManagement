@@ -1,12 +1,12 @@
-package com.spring.bioMedical.Controller;
+package com.spring.eventmanagement.Controller;
 
-import com.spring.bioMedical.entity.Admin;
-import com.spring.bioMedical.entity.Event;
-import com.spring.bioMedical.entity.Participant;
-import com.spring.bioMedical.repository.ParticipantRepository;
-import com.spring.bioMedical.service.AdminService;
-import com.spring.bioMedical.service.EventService;
-import com.spring.bioMedical.utils.Utils;
+import com.spring.eventmanagement.entity.Admin;
+import com.spring.eventmanagement.entity.Event;
+import com.spring.eventmanagement.entity.Participant;
+import com.spring.eventmanagement.repository.ParticipantRepository;
+import com.spring.eventmanagement.service.AdminService;
+import com.spring.eventmanagement.service.EventService;
+import com.spring.eventmanagement.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -102,8 +102,8 @@ public class AdminController {
         adminOld.setPassword(admin.getPassword());
         adminService.save(adminOld);
 
-        // use a redirect to prevent duplicate submissions
-        return "redirect:/admin/user-details";
+
+        return "redirect:/admin/profile";
     }
 
 
@@ -130,7 +130,7 @@ public class AdminController {
         Event event = new Event();
         theModel.addAttribute("event", event);
         theModel.addAttribute("adminId", admin.getId());
-        return "admin/createEvent";
+        return "admin/eventCreate";
     }
 
     @PostMapping("/create-event")
@@ -138,7 +138,7 @@ public class AdminController {
 
         if (null != errors && errors.getErrorCount() > 0) {
             theModel.addAttribute("event", event);
-            return "admin/createEvent";
+            return "admin/eventCreate";
         }
         // get last seen
         String username = "";
@@ -162,7 +162,7 @@ public class AdminController {
         eventService.save(event);
 
         // use a redirect to prevent duplicate submissions
-        return "redirect:/admin/user-details";
+        return "redirect:/admin/profile";
     }
 
 

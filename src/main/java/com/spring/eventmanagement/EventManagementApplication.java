@@ -1,4 +1,4 @@
-package com.spring.bioMedical;
+package com.spring.eventmanagement;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
