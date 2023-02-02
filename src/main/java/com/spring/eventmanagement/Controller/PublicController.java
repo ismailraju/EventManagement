@@ -30,6 +30,13 @@ public class PublicController extends Utils {
     @PostMapping("/participant")
     public String addParticipant(@ModelAttribute("participant") Participant participant) {
 
+        if (
+                participant.getName() == null || participant.getName().isEmpty() ||
+                        participant.getEmail() == null || participant.getEmail().isEmpty()
+        ) {
+            return "redirect:/public/" + participant.getEvent().getId() + "?msg=required";
+        }
+
         Long cnt = participantRepository.countByEmailAndEvent_Id(participant.getEmail(), participant.getEvent().getId());
         if (cnt > 0L) {
             return "redirect:/public/" + participant.getEvent().getId() + "?msg=exist";
@@ -65,6 +72,8 @@ public class PublicController extends Utils {
                 theModel.addAttribute("confirmationMessage", "You are Registered For this Event.");
             if (msg.equals("exist"))
                 theModel.addAttribute("confirmationMessageDanger", "You are Already Registered For this Event.");
+            if (msg.equals("required"))
+                theModel.addAttribute("confirmationMessageDanger", "Name And Email are required");
 
         }
 

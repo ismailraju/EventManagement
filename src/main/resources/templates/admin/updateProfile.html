@@ -179,7 +179,13 @@
 
 <!-- Custom scripts for all pages-->
 <script th:src="@{/vendor/js/sb-admin.min.js}"></script>
+<script>
 
+    $(document).ready(function () {
+
+        $( "#nav li:nth-child(3)" ).addClass("active");
+    });
+</script>
 </body>
 
 </html>

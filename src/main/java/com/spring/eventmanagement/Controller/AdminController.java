@@ -8,6 +8,9 @@ import com.spring.eventmanagement.service.AdminService;
 import com.spring.eventmanagement.service.EventService;
 import com.spring.eventmanagement.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -199,6 +202,7 @@ public class AdminController {
 
         List<Event> events = eventService.findAllByCreatedBy(admin);
         model.addAttribute("events", events);
+        model.addAttribute("adminId", admin.getId());
 
 
         return "admin/events";
@@ -214,10 +218,28 @@ public class AdminController {
         List<Participant> participants = participantRepository.findAllByEvent(event);
         theModel.addAttribute("event", event);
         theModel.addAttribute("participants", participants);
+        theModel.addAttribute("eventId", event.getId());
 
         theModel.addAttribute("eventtime", Utils.getEventTime(event.getStart(), event.getEnd()));
 
         return "admin/eventAdmin";
+    }
+
+
+    @RequestMapping(value = "/participants/{eventId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<Wrapper> listAllProducts(
+            @PathVariable("eventId") Integer eventId,
+            @RequestParam("start") int start,
+            @RequestParam("draw") int draw,
+            @RequestParam("length") int pageLength
+    ) {
+        Long count = participantRepository.countByEvent_Id(eventId);
+        List<Participant> participants = participantRepository.findAllByEvent_IdOrderByIdDesc(eventId, PageRequest.of(start, pageLength));
+
+        Wrapper w = new Wrapper(participants, count.intValue(), pageLength, participants.size(),draw);
+
+        return new ResponseEntity<>(w, HttpStatus.OK);
     }
 
 

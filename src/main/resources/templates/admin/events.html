@@ -175,6 +175,30 @@
             $('#eventsdataTable').DataTable();
 
 
+            // var tableProduct = $('#eventsdataTable').DataTable({
+            //     "info": false,
+            //     "processing": true,
+            //     "serverSide": true,
+            //     "pageLength":3,
+            //     "ajax": {
+            //         "type": 'GET',
+            //         "url": '${pageContext.request.contextPath}/events-dt/[[${adminId}]]',
+            //         dataSrc:"data"
+            //     },
+            //     "columns": [
+            //         { "data": "id" },
+            //         { "data": "title" },
+            //         { "data": "description" },
+            //         { "data": "location" },
+            //         { "data": "start" },
+            //         { "data": "end" },
+            //         { "data": "going" }
+            //     ]
+            // });
+
+
+
+            $( "#nav li:nth-child(1)" ).addClass("active");
         });
 
         function rowClicked(value) {

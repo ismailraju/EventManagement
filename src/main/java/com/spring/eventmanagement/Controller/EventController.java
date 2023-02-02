@@ -6,6 +6,9 @@ import com.spring.eventmanagement.repository.AdminRepository;
 import com.spring.eventmanagement.repository.EventRepository;
 import com.spring.eventmanagement.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -97,7 +100,7 @@ class EventController {
 
     @RequestMapping(value = "/events/{adminId}", method = RequestMethod.GET)
     public List<Event> getEventsInRangeAdmin(
-            @PathVariable( "adminId") Integer adminId,
+            @PathVariable("adminId") Integer adminId,
             @RequestParam(value = "start", required = true) String start,
             @RequestParam(value = "end", required = true) String end) {
         Date startDate = null;
@@ -137,5 +140,22 @@ class EventController {
 
         return adminService.findByEmail(username);
     }
+
+    @RequestMapping(value = "/events-dt/{adminId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<Wrapper> listAllProducts(
+            @PathVariable("adminId") Integer adminId,
+            @RequestParam("start") int start,
+            @RequestParam("draw") int draw,
+            @RequestParam("length") int pageLength
+    ) {
+        Long count = eventRepository.countByCreatedBy(Admin.builder().id(adminId).build());
+        List<Event> events = eventRepository.findAllByCreatedBy(Admin.builder().id(adminId).build(), PageRequest.of(0, 2));
+        Wrapper w = new Wrapper(events, count.intValue(), start, events.size(),draw);
+
+        return new ResponseEntity<>(w, HttpStatus.OK);
+    }
+
+
 }
 
