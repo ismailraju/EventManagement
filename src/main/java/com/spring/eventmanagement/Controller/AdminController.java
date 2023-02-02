@@ -103,6 +103,12 @@ public class AdminController {
     @PostMapping("/updatePassword")
     public String updatePassword(@ModelAttribute("profile") Admin admin, Model model) {
 
+
+        if (!admin.getPassword().equals(admin.getPassword2())) {
+            model.addAttribute("confirmationMessagePassword", "Oops!  Password Not match.");
+            return EditForm(model);
+        }
+
         System.out.println(admin);
         Admin adminOld = adminService.findById(admin.getId());
 

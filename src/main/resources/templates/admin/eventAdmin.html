@@ -54,49 +54,55 @@
 
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="row form-group">
-                                <h1>
-                                    <div th:text="${event.title}"></div>
-                                </h1>
+                            <div class="form-group">
+                                <div class="row">
+                                    <h1>
+                                        <div th:text="${event.title}"></div>
+                                    </h1>
+                                </div>
                             </div>
 
-                            <div class="row form-group">
-                                <i class="fa fa-bars myicon" aria-hidden="true"></i>
+                            <div class="form-group">
+                                <div class="row">
+                                    <i class="fa fa-bars myicon" aria-hidden="true"></i>
 
-                                <div th:text="${event.description}"></div>
+                                    <div th:text="${event.description}"></div>
+                                </div>
                             </div>
-                            <div class="row form-group">
-                                <i class="fa fa-map-marker myicon" aria-hidden="true"></i>
+                            <div class="form-group">
+                                <div class="row">
+                                    <i class="fa fa-map-marker myicon" aria-hidden="true"></i>
 
 
-                                <span> <div th:text="${event.location}"></div></span>
+                                    <span> <div th:text="${event.location}"></div></span>
+                                </div>
                             </div>
 
 
                             <div class="form-group">
-                                <i class="fa fa-clock-o myicon" aria-hidden="true"></i>
 
-                                <div class="form-group row">
+                                <div class="row">
+                                    <i class="fa fa-clock-o myicon" aria-hidden="true"></i>
                                     <div class="col-sm-12  align-middle">
                                         <div th:text="${eventtime[0]}"></div>
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <div class="row">
                                     <div class="col-sm-12 align-middle">
                                         <div th:text="${eventtime[1]}"></div>
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <div class="row">
                                     <div class="col-sm-12 align-middle">
                                         <div th:text="${eventtime[2]}"></div>
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <div class="row">
                                     <div class="col-sm-12 align-middle">
                                         <div th:text="${eventtime[3]}"></div>
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <div class="row">
                                     <div class="col-sm-12 align-middle">
                                         <div th:text="${eventtime[4]}"></div>
                                     </div>
@@ -105,14 +111,14 @@
                             </div>
 
 
-                            <div class="row form-group">
-                                <i class="fa fa-user myicon" aria-hidden="true"></i>
-
-                                <div th:text="${event.going}"></div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <i class="fa fa-user myicon" aria-hidden="true"></i>
+                                    <div th:text="${ event.going}"></div>
+                                </div>
                             </div>
 
                         </div>
-
                         <div class="col-sm-6">
 
                             <div class="row form-group">

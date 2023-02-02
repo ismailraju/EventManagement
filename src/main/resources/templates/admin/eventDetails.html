@@ -18,7 +18,6 @@
     <link rel="stylesheet" type="text/css" th:href="@{/login/fonts/Linearicons-Free-v1.0.0/icon-font.min.css}">
 
 
-
 </head>
 <body>
 <div id="content-wrapper" class="container-login100">
@@ -31,63 +30,75 @@
 
 
                 <div class="row">
+
+
                     <div class="col-sm-6">
-                        <div class="row form-group">
-                            <h1>
-                                <div th:text="${event.title}"></div>
-                            </h1>
-                        </div>
-
-                        <div class="row form-group">
-                            <i class="fa fa-bars myicon" aria-hidden="true"></i>
-
-                            <div th:text="${event.description}"></div>
-                        </div>
-                        <div class="row form-group">
-                            <i class="fa fa-map-marker myicon" aria-hidden="true"></i>
-
-
-                            <span> <div th:text="${event.location}"></div></span>
-                        </div>
-
-
-                        <div class="form-group">
-                            <i class="fa fa-clock-o myicon" aria-hidden="true"></i>
-
-                            <div class="form-group row">
-                                <div class="col-sm-12  align-middle">
-                                    <div th:text="${eventtime[0]}"></div>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-sm-12 align-middle">
-                                    <div th:text="${eventtime[1]}"></div>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-sm-12 align-middle">
-                                    <div th:text="${eventtime[2]}"></div>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-sm-12 align-middle">
-                                    <div th:text="${eventtime[3]}"></div>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-sm-12 align-middle">
-                                    <div th:text="${eventtime[4]}"></div>
+                        <section>
+                            <div class="form-group">
+                                <div class="row">
+                                    <h1>
+                                        <div th:text="${event.title}"></div>
+                                    </h1>
                                 </div>
                             </div>
 
-                        </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <i class="fa fa-bars myicon" aria-hidden="true"></i>
+
+                                    <div th:text="${event.description}"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <i class="fa fa-map-marker myicon" aria-hidden="true"></i>
 
 
-                        <div class="row form-group">
-                            <i class="fa fa-user myicon" aria-hidden="true"></i>
-                            <div th:text="${ event.going}"></div>
-                        </div>
+                                    <span> <div th:text="${event.location}"></div></span>
+                                </div>
+                            </div>
 
+
+                            <div class="form-group">
+
+                                <div class="row">
+                                    <i class="fa fa-clock-o myicon" aria-hidden="true"></i>
+                                    <div class="col-sm-12  align-middle">
+                                        <div th:text="${eventtime[0]}"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 align-middle">
+                                        <div th:text="${eventtime[1]}"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 align-middle">
+                                        <div th:text="${eventtime[2]}"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 align-middle">
+                                        <div th:text="${eventtime[3]}"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 align-middle">
+                                        <div th:text="${eventtime[4]}"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <i class="fa fa-user myicon" aria-hidden="true"></i>
+                                    <div th:text="${ event.going}"></div>
+                                </div>
+                            </div>
+
+                        </section>
                     </div>
                     <div class="col-sm-6">
                         <form action="#" th:action="@{/public/participant}"
@@ -105,7 +116,7 @@
 
                             <input hidden type="number" th:field="*{event.id}">
 
-                            <button type="submit" class="btn btn-info col-2">Registration</button>
+                            <button type="submit" class="btn btn-info">Registration</button>
 
 
                         </form>
@@ -113,6 +124,8 @@
                         <div class="form-group">
                             <div th:if="${confirmationMessage}" class="alert alert-success"
                                  th:text="${confirmationMessage}"></div>
+                            <div th:if="${confirmationMessageDanger}" class="alert alert-danger"
+                                 th:text="${confirmationMessageDanger}"></div>
                         </div>
                     </div>
                 </div>

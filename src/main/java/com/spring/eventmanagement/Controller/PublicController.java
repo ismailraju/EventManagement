@@ -29,6 +29,11 @@ public class PublicController extends Utils {
 
     @PostMapping("/participant")
     public String addParticipant(@ModelAttribute("participant") Participant participant) {
+
+        Long cnt = participantRepository.countByEmailAndEvent_Id(participant.getEmail(), participant.getEvent().getId());
+        if (cnt > 0L) {
+            return "redirect:/public/" + participant.getEvent().getId() + "?msg=exist";
+        }
         Event event = eventService.findById(participant.getEvent().getId());
         participant.setEvent(event);
         participant.setCreation(new Date());
@@ -38,22 +43,31 @@ public class PublicController extends Utils {
 
 
         long count = participantRepository.countByEvent(event);
-        event.setGoing((int)count);
+        event.setGoing((int) count);
         eventService.save(event);
 
-        return "redirect:/public/" + event.getId();
+//        return eventDetails(event.getId(), theModel);
+        return "redirect:/public/" + event.getId() + "?msg=success";
     }
 
 
     @GetMapping("/{id}")
-    public String eventDetails(@PathVariable("id") Integer id, Model theModel) {
+    public String eventDetails(@PathVariable("id") Integer id, Model theModel,
+                               @RequestParam(value = "msg", required = false) String msg) {
+
 
         Event event = eventService.findById(id);
         Participant participant = new Participant();
         participant.setEvent(event);
+        if (msg != null) {
 
+            if (msg.equals("success"))
+                theModel.addAttribute("confirmationMessage", "You are Registered For this Event.");
+            if (msg.equals("exist"))
+                theModel.addAttribute("confirmationMessageDanger", "You are Already Registered For this Event.");
 
-        theModel.addAttribute("confirmationMessage", "You are Registerd For this Event.");
+        }
+
         theModel.addAttribute("event", event);
         theModel.addAttribute("participant", participant);
         theModel.addAttribute("eventtime", Utils.getEventTime(event.getStart(), event.getEnd()));

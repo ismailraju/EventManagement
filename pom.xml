@@ -11,10 +11,10 @@
     </parent>
     <groupId>com.spring</groupId>
     <artifactId>EventManagement</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1</version>
     <name>EventManagement</name>
     <description>EventManagement project for Spring Boot</description>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <properties>
         <java.version>11</java.version>
     </properties>
