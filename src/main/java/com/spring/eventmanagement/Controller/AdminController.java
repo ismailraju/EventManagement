@@ -18,6 +18,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -71,13 +73,12 @@ public class AdminController {
 
         theModel.addAttribute("profile", admin);
 
-//        return "admin/updateMyProfile";
         return "admin/updateProfile";
     }
 
 
     @PostMapping("/update")
-    public String update(@ModelAttribute("profile") Admin admin, Model model) {
+    public String update(@ModelAttribute("profile") Admin admin, Model model, HttpServletRequest request) {
 
 
         Long userExists = adminService.countByEmailAndIdNot(admin.getEmail(), admin.getId());
@@ -98,13 +99,13 @@ public class AdminController {
 
         model.addAttribute("confirmationMessageEmail",
                 "e-mail address updated." + admin.getEmail());
-
-//        return "redirect:/admin/profile";
-        return EditForm(model);
+        sessionInvalidate(request);
+        return "redirect:/?msg=em";
+//        return EditForm(model);
     }
 
     @PostMapping("/updatePassword")
-    public String updatePassword(@ModelAttribute("profile") Admin admin, Model model) {
+    public String updatePassword(@ModelAttribute("profile") Admin admin, Model model,HttpServletRequest request) {
 
 
         if (!admin.getPassword().equals(admin.getPassword2())) {
@@ -112,7 +113,7 @@ public class AdminController {
             return EditForm(model);
         }
 
-        System.out.println(admin);
+
         Admin adminOld = adminService.findById(admin.getId());
 
         adminOld.setPassword(admin.getPassword());
@@ -120,10 +121,19 @@ public class AdminController {
 
         model.addAttribute("confirmationMessagePassword",
                 "Password updated.");
-//        return "redirect:/admin/profile";
-        return EditForm(model);
-    }
 
+        sessionInvalidate(request);
+//        return "redirect:/admin/profile";
+//        return EditForm(model);
+        return "redirect:/?msg=ps";
+    }
+void sessionInvalidate(HttpServletRequest request){
+    HttpSession session= request.getSession(false);
+    SecurityContextHolder.clearContext();
+    if(session != null) {
+        session.invalidate();
+    }
+}
 
     @GetMapping("/create-event")
     public String EventForm(Model theModel) {
@@ -200,7 +210,7 @@ public class AdminController {
 
         Admin admin = adminService.findByEmail(username);
 
-        List<Event> events = eventService.findAllByCreatedBy(admin);
+        List<Event> events = eventService.findAllByCreatedByAndIsDeletedFalse(admin);
         model.addAttribute("events", events);
         model.addAttribute("adminId", admin.getId());
 

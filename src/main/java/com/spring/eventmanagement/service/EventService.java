@@ -29,6 +29,10 @@ public class EventService {
         return eventRepository.findAllByCreatedBy(admin);
     }
 
+    public List<Event> findAllByCreatedByAndIsDeletedFalse(Admin admin ) {
+        return eventRepository.findAllByCreatedByAndIsDeletedFalse(admin);
+    }
+
 
     public Event findById(Integer eventId) {
         Optional<Event> eventOptional = eventRepository.findById(eventId);

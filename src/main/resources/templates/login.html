@@ -50,7 +50,8 @@
                         Login
                     </button>
                 </div>
-
+                <div th:if="${confirmationMessage}" class="alert alert-success"
+                     th:text="${confirmationMessage}"></div>
 
                 <div th:if="${param.error != null}" class="text-center w-full p-t-42 p-b-22">
 							<span class="alert alert-danger">

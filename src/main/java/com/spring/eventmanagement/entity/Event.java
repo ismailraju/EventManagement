@@ -1,9 +1,6 @@
 package com.spring.eventmanagement.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -19,6 +16,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Event  implements Serializable {
 
     @Id
@@ -64,6 +62,9 @@ public class Event  implements Serializable {
 
     @Column(name = "not_going")
     private int notGoing;
+
+    @Column(name = "is_deleted", nullable = false,columnDefinition="bit(1) default false"  )
+    private boolean isDeleted=false;
 
 
     @ManyToOne(cascade = CascadeType.ALL)

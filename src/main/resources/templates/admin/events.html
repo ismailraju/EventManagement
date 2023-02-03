@@ -60,38 +60,30 @@
 
                             </tr>
                             </thead>
-                            <tfoot>
-                            <tr>
-                                <th>Id</th>
-                                <th>Title</th>
-                                <th>Description</th>
-                                <th>Location</th>
-                                <th>Start</th>
-                                <th>End</th>
-                                <th>Going</th>
-                                <th>Action</th>
 
-                            </tr>
                             <tbody>
-                            <tr th:each="temp : ${events}">
-<!--                                th:onclick="'javascript:rowClicked(\'' + ${temp.id} + '\');'">-->
+                            <!--                            <tr th:each="temp : ${events}">-->
+                            <!--                                &lt;!&ndash;                                th:onclick="'javascript:rowClicked(\'' + ${temp.id} + '\');'">&ndash;&gt;-->
 
-                                <td th:text="${temp.id}"/>
-                                <td th:text="${temp.title}"/>
-                                <td th:text="${temp.description}"/>
-                                <td th:text="${temp.location}"/>
-                                <td th:text="${temp.start}"/>
-                                <td th:text="${temp.end}"/>
-                                <td th:text="${temp.going}"/>
+                            <!--                                <td th:text="${temp.id}"/>-->
+                            <!--                                <td th:text="${temp.title}"/>-->
+                            <!--                                <td th:text="${temp.description}"/>-->
+                            <!--                                <td th:text="${temp.location}"/>-->
+                            <!--                                <td th:text="${temp.start}"/>-->
+                            <!--                                <td th:text="${temp.end}"/>-->
+                            <!--                                <td th:text="${temp.going}"/>-->
 
-                                <td>
-                                    <a th:href="@{/admin/event/{id}(id=${temp.id})}" target="_blank">
-                                        <i class="fa fa-info-circle" aria-hidden="true"></i>
-                                    </a>
-                                </td>
+                            <!--                                <td>-->
+                            <!--                                    <a th:href="@{/admin/event/{id}(id=${temp.id})}" target="_blank">-->
+                            <!--                                        <i class="fa fa-info-circle" aria-hidden="true"></i>-->
+                            <!--                                    </a>-->
+                            <!--                                    <a th:attr="eventId = ${temp.id}" class="deleteEvent">-->
+                            <!--                                        <i class="fa fa-trash" aria-hidden="true"></i>-->
+                            <!--                                    </a>-->
+                            <!--                                </td>-->
 
 
-                            </tr>
+                            <!--                            </tr>-->
 
                             </tbody>
                         </table>
@@ -168,46 +160,110 @@
     <!-- Demo scripts for this page-->
     <!--    <script src="../vendor/js/demo/datatables-demo.js"></script>-->
     <!--    <script src="../vendor/js/demo/chart-area-demo.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
 
+
         $(document).ready(function () {
-            $('#eventsdataTable').DataTable();
+            // var datatable=  $('#eventsdataTable').DataTable();
 
 
-            // var tableProduct = $('#eventsdataTable').DataTable({
-            //     "info": false,
-            //     "processing": true,
-            //     "serverSide": true,
-            //     "pageLength":3,
-            //     "ajax": {
-            //         "type": 'GET',
-            //         "url": '${pageContext.request.contextPath}/events-dt/[[${adminId}]]',
-            //         dataSrc:"data"
-            //     },
-            //     "columns": [
-            //         { "data": "id" },
-            //         { "data": "title" },
-            //         { "data": "description" },
-            //         { "data": "location" },
-            //         { "data": "start" },
-            //         { "data": "end" },
-            //         { "data": "going" }
-            //     ]
-            // });
+            function prepareEditableOrder(data, type, row, meta) {
+                return '<a  href="/admin/event/' + data + '" target="_blank">  <i class="fa fa-info-circle" aria-hidden="true"></i>  </a>'
+                    + '<a  href=""   eventId = "' + data + '" class="deleteEvent">  <i class="fa fa-trash" aria-hidden="true"></i>  </a> '
+                //     return '<input class="form-control cell-datatable" id="' + row.Id + '" type="text"  value = ' + data + ' >';
+            }
+
+            function dateFormat(data, type, row, meta) {
+                return moment(data).format("DD-MMM-YYYY HH:mm");
+            }
+
+            var datatable = $('#eventsdataTable').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "pageLength": 10,
+                "pagingType": "full_numbers",
+                "lengthMenu": [
+                    [10, 25, 50],
+                    ['10 rows', '25 rows', '50 rows']
+                ],
+                "ajax": {
+                    "type": 'GET',
+                    "url": '/events-dt/[[${adminId}]]',
+                    dataSrc: "data"
+                },
+                "columns": [
+                    {"data": "id"},
+                    {"data": "title"},
+                    {"data": "description"},
+                    {"data": "location"},
+                    {"data": "start", render: dateFormat},
+                    {"data": "end", render: dateFormat},
+                    {"data": "going"},
+                    {"data": "id", render: prepareEditableOrder}
+                ],
+                "drawCallBack": function (settings) {
+                    console.log('DataTables has finished drawing.');
+                    updateDeleteClickEvent();
+                },
+                "initComplete": function (settings, json) {
+                    console.log('DataTables has finished initComplete.');
+                    updateDeleteClickEvent();
+                }
+            });
 
 
+            $("#nav li:nth-child(1)").addClass("active");
 
-            $( "#nav li:nth-child(1)" ).addClass("active");
+
+            function updateDeleteClickEvent() {
+
+                $('#eventsdataTable .deleteEvent').click(function () {
+                    eventId = $(this).attr('eventId');
+                    $.ajax({
+                        url: '/event/' + eventId,
+                        type: 'DELETE',
+                        success: function (result) {
+                            $('#exampleModal').modal("show");
+                        }
+                    });
+
+                });
+            }
+
+
         });
 
         function rowClicked(value) {
             location.href = "/admin/event/" + value;
         }
 
+        $('#exampleModal').on('hidden.bs.modal', function () {
+            datatable.ajax.reload();
+        });
+
+
     </script>
 
-
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Successfully Deleted.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+                    <!--                    <button type="button" class="btn btn-primary">Save changes</button>-->
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

@@ -32,13 +32,13 @@ class EventController {
 
     @RequestMapping(value = "/allevents", method = RequestMethod.GET)
     public List<Event> allEvents() {
-        return eventRepository.findAll();
+        return eventRepository.findAllByIsDeletedFalse();
     }
 
 
     @RequestMapping(value = "/allevents/{adminId}", method = RequestMethod.GET)
     public List<Event> allEventsAdmin(@PathVariable("adminId") Integer adminId) {
-        return eventRepository.findAllByCreatedBy(Admin.builder().id(adminId).build());
+        return eventRepository.findAllByCreatedByAndIsDeletedFalse(Admin.builder().id(adminId).build());
     }
 
     @RequestMapping(value = "/event", method = RequestMethod.POST)
@@ -71,8 +71,32 @@ class EventController {
 
     @RequestMapping(value = "/event", method = RequestMethod.DELETE)
     public Event removeEvent(@RequestBody Event event) {
-        eventRepository.delete(event);
+        Optional<Event> eventOptional = eventRepository.findById(event.getId());
+        if (eventOptional.isPresent()) {
+            event = eventOptional.get();
+            event.setDeleted(true);
+            eventRepository.save(event);
+//            return new ResponseEntity<>(event, HttpStatus.OK);
+
+        }
+//        eventRepository.delete(event);
         return event;
+    }
+
+    @RequestMapping(value = "/event/{eventId}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public ResponseEntity<Event> removeEvent(@PathVariable("eventId") Integer eventId) {
+        Optional<Event> eventOptional = eventRepository.findById(eventId);
+        if (eventOptional.isPresent()) {
+            Event event = eventOptional.get();
+            event.setDeleted(true);
+            eventRepository.save(event);
+            return new ResponseEntity<>(event, HttpStatus.OK);
+
+        }
+
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+
     }
 
     @RequestMapping(value = "/events", method = RequestMethod.GET)
@@ -149,9 +173,9 @@ class EventController {
             @RequestParam("draw") int draw,
             @RequestParam("length") int pageLength
     ) {
-        Long count = eventRepository.countByCreatedBy(Admin.builder().id(adminId).build());
-        List<Event> events = eventRepository.findAllByCreatedBy(Admin.builder().id(adminId).build(), PageRequest.of(0, 2));
-        Wrapper w = new Wrapper(events, count.intValue(), start, events.size(),draw);
+        Long count = eventRepository.countByCreatedByAndIsDeletedFalse(Admin.builder().id(adminId).build());
+        List<Event> events = eventRepository.findAllByCreatedByAndIsDeletedFalseOrderByIdDesc(Admin.builder().id(adminId).build(), PageRequest.of(start, pageLength));
+        Wrapper w = new Wrapper(events, count.intValue(), start, events.size(), draw);
 
         return new ResponseEntity<>(w, HttpStatus.OK);
     }
