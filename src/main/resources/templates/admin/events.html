@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
 
-    <link rel="icon" type="../vendor/image/png" href="Error/pic.jpg"/>
+    <link rel="icon" type="image/png" href="/favicon.ico"/>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -160,7 +160,8 @@
     <!-- Demo scripts for this page-->
     <!--    <script src="../vendor/js/demo/datatables-demo.js"></script>-->
     <!--    <script src="../vendor/js/demo/chart-area-demo.js"></script>-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" th:src="@{/js/moment.min.js}"></script>
+    <script type="text/javascript"  th:src="@{/js/jquery.spring-friendly.js}"></script>
 
     <script>
 
@@ -176,7 +177,13 @@
             }
 
             function dateFormat(data, type, row, meta) {
-                return moment(data).format("DD-MMM-YYYY HH:mm");
+                // debugger;
+                // var stillUtc = moment(data).toDate();
+                // return moment(stillUtc).local().format('YYYY-MM-DD HH:mm:ss');
+
+                // return moment(data).local().format("DD-MMM-YYYY hh:mm a");
+                // return moment(data).format("DD-MMM-YYYY hh:mm a");
+                return moment(data).format("YYYY-MM-DD HH:mm");
             }
 
             var datatable = $('#eventsdataTable').DataTable({

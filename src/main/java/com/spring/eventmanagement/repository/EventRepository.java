@@ -45,4 +45,6 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     List<Event> findAllByCreatedByAndIsDeletedFalseOrderByIdDesc(Admin build, Pageable of);
 
     Long countByCreatedByAndIsDeletedFalse(Admin build);
+
+    List<Event> findAllByCreatedByAndIsDeletedFalseAndStartAndEnd(Admin admin, Date start, Date end);
 }

@@ -4,11 +4,16 @@ import com.spring.eventmanagement.entity.Admin;
 import com.spring.eventmanagement.entity.Event;
 import com.spring.eventmanagement.entity.Participant;
 import com.spring.eventmanagement.repository.ParticipantRepository;
+import com.spring.eventmanagement.repositoryDatatable.ParticipantDatatableRepository;
+import com.spring.eventmanagement.repositoryDatatable.ParticipantSpecification;
+import com.spring.eventmanagement.repositoryDatatable.SearchCriteria;
 import com.spring.eventmanagement.service.AdminService;
 import com.spring.eventmanagement.service.EventService;
 import com.spring.eventmanagement.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
+import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,15 +42,17 @@ public class AdminController {
 
 
     private final ParticipantRepository participantRepository;
+    private final ParticipantDatatableRepository participantDatatableRepository;
 
 
     @Autowired
     public AdminController(EventService eventService, AdminService obj,
-                           ParticipantRepository participantRepository) {
+                           ParticipantRepository participantRepository, ParticipantDatatableRepository participantDatatableRepository) {
         this.eventService = eventService;
         adminService = obj;
 
         this.participantRepository = participantRepository;
+        this.participantDatatableRepository = participantDatatableRepository;
     }
 
 
@@ -105,7 +112,7 @@ public class AdminController {
     }
 
     @PostMapping("/updatePassword")
-    public String updatePassword(@ModelAttribute("profile") Admin admin, Model model,HttpServletRequest request) {
+    public String updatePassword(@ModelAttribute("profile") Admin admin, Model model, HttpServletRequest request) {
 
 
         if (!admin.getPassword().equals(admin.getPassword2())) {
@@ -127,13 +134,14 @@ public class AdminController {
 //        return EditForm(model);
         return "redirect:/?msg=ps";
     }
-void sessionInvalidate(HttpServletRequest request){
-    HttpSession session= request.getSession(false);
-    SecurityContextHolder.clearContext();
-    if(session != null) {
-        session.invalidate();
+
+    void sessionInvalidate(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        SecurityContextHolder.clearContext();
+        if (session != null) {
+            session.invalidate();
+        }
     }
-}
 
     @GetMapping("/create-event")
     public String EventForm(Model theModel) {
@@ -236,7 +244,7 @@ void sessionInvalidate(HttpServletRequest request){
     }
 
 
-    @RequestMapping(value = "/participants/{eventId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/participants1/{eventId}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<Wrapper> listAllProducts(
             @PathVariable("eventId") Integer eventId,
@@ -247,9 +255,28 @@ void sessionInvalidate(HttpServletRequest request){
         Long count = participantRepository.countByEvent_Id(eventId);
         List<Participant> participants = participantRepository.findAllByEvent_IdOrderByIdDesc(eventId, PageRequest.of(start, pageLength));
 
-        Wrapper w = new Wrapper(participants, count.intValue(), pageLength, participants.size(),draw);
+        Wrapper w = new Wrapper(participants, count.intValue(), pageLength, participants.size(), draw);
 
         return new ResponseEntity<>(w, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/participants/{eventId}", method = RequestMethod.GET)
+    @ResponseBody
+    public DataTablesOutput<Participant> listAllProducts(
+            @PathVariable("eventId") Integer eventId,
+            @Valid DataTablesInput dataTablesInput
+    ) {
+
+        ParticipantSpecification spec =
+                new ParticipantSpecification(
+                        new SearchCriteria("event",
+                                ":",
+                                Event.builder().id(eventId).build()
+                        )
+                );
+
+
+        return participantDatatableRepository.findAll(dataTablesInput, spec);
     }
 
 

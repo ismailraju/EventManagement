@@ -3,16 +3,24 @@ package com.spring.eventmanagement.Controller;
 import com.spring.eventmanagement.entity.Admin;
 import com.spring.eventmanagement.entity.Event;
 import com.spring.eventmanagement.repository.AdminRepository;
+import com.spring.eventmanagement.repositoryDatatable.EventDatatableRepository;
 import com.spring.eventmanagement.repository.EventRepository;
+import com.spring.eventmanagement.repositoryDatatable.SearchCriteria;
+import com.spring.eventmanagement.repositoryDatatable.EventSpecification;
 import com.spring.eventmanagement.service.AdminService;
+import com.spring.eventmanagement.utils.SearchParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+
+import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
+import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,6 +32,8 @@ class EventController {
 
     @Autowired
     private EventRepository eventRepository;
+    @Autowired
+    private EventDatatableRepository eventDatatableRepository;
     @Autowired
     private AdminService adminService;
     @Autowired
@@ -37,9 +47,23 @@ class EventController {
 
 
     @RequestMapping(value = "/allevents/{adminId}", method = RequestMethod.GET)
-    public List<Event> allEventsAdmin(@PathVariable("adminId") Integer adminId) {
-        return eventRepository.findAllByCreatedByAndIsDeletedFalse(Admin.builder().id(adminId).build());
+    public List<Event> allEventsAdmin(
+            @PathVariable("adminId") Integer adminId
+//            @RequestParam("start") Date start,
+//            @RequestParam("end") Date end
+    ) {
+        List<Event> events = eventRepository.findAllByCreatedByAndIsDeletedFalse(
+                Admin.builder().id(adminId).build()
+        );
+//        List<Event> events = eventRepository.findAllByCreatedByAndIsDeletedFalseAndStartAndEnd(
+//                Admin.builder().id(adminId).build(),
+//                start,
+//                end
+//        );
+
+        return events;
     }
+
 
     @RequestMapping(value = "/event", method = RequestMethod.POST)
     public Event addEvent(@RequestBody Event event) {
@@ -165,19 +189,54 @@ class EventController {
         return adminService.findByEmail(username);
     }
 
-    @RequestMapping(value = "/events-dt/{adminId}", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseEntity<Wrapper> listAllProducts(
+    @RequestMapping(value = "/events-dt1/{adminId}", method = RequestMethod.GET)
+
+    public Wrapper listAllProducts(
             @PathVariable("adminId") Integer adminId,
             @RequestParam("start") int start,
             @RequestParam("draw") int draw,
-            @RequestParam("length") int pageLength
+            @RequestParam("length") int pageLength,
+            @RequestParam("search") SearchParameter SearchParameter
     ) {
         Long count = eventRepository.countByCreatedByAndIsDeletedFalse(Admin.builder().id(adminId).build());
         List<Event> events = eventRepository.findAllByCreatedByAndIsDeletedFalseOrderByIdDesc(Admin.builder().id(adminId).build(), PageRequest.of(start, pageLength));
         Wrapper w = new Wrapper(events, count.intValue(), start, events.size(), draw);
 
-        return new ResponseEntity<>(w, HttpStatus.OK);
+        return w;
+    }
+
+    @RequestMapping(value = "/events-dt/{adminId}", method = RequestMethod.GET)
+
+    public DataTablesOutput<Event> listAllProducts(
+            @PathVariable("adminId") Integer adminId,
+            @Valid DataTablesInput dataTablesInput
+    ) {
+
+        EventSpecification spec =
+                new EventSpecification(
+                        new SearchCriteria("createdBy",
+                                ":",
+                              Admin.builder().id(  adminId).build()
+                        )
+                );
+        EventSpecification spec2 =
+                new EventSpecification(
+                        new SearchCriteria("isDeleted",
+                                ":",
+                              false
+                        )
+                );
+
+        return eventDatatableRepository.findAll(
+                 dataTablesInput
+                ,spec.and(spec2)
+        );
+//        return eventDatatableRepository.findAllByCreatedByAndIsDeletedFalseOrderByIdDesc(
+//                Admin.builder().id(adminId).build()
+//                , dataTablesInput
+//        );
+
+
     }
 
 

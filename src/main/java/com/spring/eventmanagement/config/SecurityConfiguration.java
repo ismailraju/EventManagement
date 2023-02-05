@@ -91,7 +91,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/event/**",
                 "/public/**",
                 "/Image/**",
-                "/images/**"
+                "/images/**",
+                "/favicon.ico"
         );
 
     }

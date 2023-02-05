@@ -12,7 +12,7 @@
 
     <title>New Event</title>
 
-
+    <link rel="icon" type="image/png" href="/favicon.ico"/>
     <!-- Bootstrap core CSS-->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -350,8 +350,8 @@
             valid = valid && validateDateRange(eventStart, eventEnd);
 
 
-            eventStart = moment.utc(modstartdateandtime.value).toDate();
-            eventEnd = moment.utc(modenddateandtime.value).toDate();
+            // eventStart = moment.utc(modstartdateandtime.value).toDate();
+            // eventEnd = moment.utc(modenddateandtime.value).toDate();
 
 
             if (valid) {
@@ -394,8 +394,12 @@
             var valid = true;
 
 
-            eventStart = moment.utc(event.start).toDate();
-            eventEnd = moment.utc(event.end).toDate();
+            eventStart =  event.start ;
+            eventEnd =  event.end ;
+
+            // eventStart = moment.utc(event.start).toDate();
+            // eventEnd = moment.utc(event.end).toDate();
+
 
             eventData = {
                 id: event.id,
@@ -438,8 +442,8 @@
             valid = valid && validateDateRange(eventStart, eventEnd);
 
 
-            eventStart = moment.utc(startdateandtime.value).toDate();
-            eventEnd = moment.utc(enddateandtime.value).toDate();
+            // eventStart = moment.utc(startdateandtime.value).toDate();
+            // eventEnd = moment.utc(enddateandtime.value).toDate();
 
 
             if (valid) {
@@ -522,6 +526,7 @@
         $(document).ready(function () {
 
             $('#calendar').fullCalendar({
+                timezone: 'local',
                 header: {
                     left: 'prev,next today',
                     center: 'title',

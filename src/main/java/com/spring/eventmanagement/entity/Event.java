@@ -39,11 +39,13 @@ public class Event  implements Serializable {
 
     @Column(name = "start")
     @NotEmpty(message = "Please provide start time")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date start;
 
 
     @Column(name = "end")
     @NotEmpty(message = "Please provide end time")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date end;
 
 
