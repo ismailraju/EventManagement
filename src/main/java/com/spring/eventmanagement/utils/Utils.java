@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Utils {
-
+public static long BEFORE_1HOUR_SECEND= 60L*60L;
    public static String[] getEventTime(Date start, Date end) {
 
         String ans = "";

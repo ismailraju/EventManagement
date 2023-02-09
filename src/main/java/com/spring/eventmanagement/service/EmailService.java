@@ -11,11 +11,13 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -33,6 +35,8 @@ public class EmailService {
 
     @Value("${spring.mail.username}")
     private String sender;
+
+    SimpleDateFormat dateFormat=new SimpleDateFormat("YYYY/MMM/DD HH:mm");
 
     // Method 1
     // To send a simple email
@@ -206,29 +210,29 @@ public class EmailService {
     String getEventDetails(Event event) {
         return "\nDetails: " + event.getDescription() +
                 "\nLocation: " + event.getLocation() + "" +
-                "\nTime: " + event.getStart().toString() + " - " + event.getEnd().toString();
+                "\nTime: " +dateFormat.format( event.getStart())  + " to " + dateFormat.format( event.getEnd());
 
 
     }
 
-
+@Async
     public void newParticipant(Participant participant) {
 
         sendNewParticipant(participant);
         sendFriendParticipant(participant);
     }
-
+    @Async
     public void newEvent(Event event) {
         sendNewEventForOrganizer(event);
 
     }
-
+    @Async
     public void updateEvent(Event event) {
         sendUpdateEventForOrganizer(event);
         sendUpdateEventForParticipant(event);
 
     }
-
+    @Async
     public void before1hour(Event event) {
         sendBefore1hourForOrganizer(event);
         sendBefore1hourForParticipant(event);

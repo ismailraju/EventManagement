@@ -27,8 +27,8 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     public List<Event> findByDateBetween(Date start, Date end, Integer adminId,boolean isDeleted);
 
 
-    @Query("select b.start from Event b where b.start >= NOW() limit 1")
-    public Date findNextEventTime();
+
+    public Event findFirst1ByIs1hourEmailTransferFalseAndIsDeletedFalseOrderByStartAsc();
 
     List<Event> findAllByCreatedBy(Admin admin);
 

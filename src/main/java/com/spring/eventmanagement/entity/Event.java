@@ -73,5 +73,6 @@ public class Event  implements Serializable {
     @JoinColumn(name = "created_by", referencedColumnName = "id")
     private Admin createdBy;
 
-
+    @Column(name = "is_1hour_email_transfer", nullable = false,columnDefinition="bit(1) default false"  )
+    private boolean is1hourEmailTransfer=false;
 }
