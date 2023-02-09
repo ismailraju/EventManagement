@@ -26,6 +26,10 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     @Query("select b from Event b where b.start >= ?1 and b.end <= ?2 and b.createdBy.id <= ?3 and b.isDeleted = ?4")
     public List<Event> findByDateBetween(Date start, Date end, Integer adminId,boolean isDeleted);
 
+
+    @Query("select b.start from Event b where b.start >= NOW() limit 1")
+    public Date findNextEventTime();
+
     List<Event> findAllByCreatedBy(Admin admin);
 
     List<Event> findAllByCreatedBy(Admin admin, Pageable pageable);

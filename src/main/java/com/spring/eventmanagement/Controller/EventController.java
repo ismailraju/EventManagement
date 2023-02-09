@@ -3,15 +3,15 @@ package com.spring.eventmanagement.Controller;
 import com.spring.eventmanagement.entity.Admin;
 import com.spring.eventmanagement.entity.Event;
 import com.spring.eventmanagement.repository.AdminRepository;
-import com.spring.eventmanagement.repositoryDatatable.EventDatatableRepository;
 import com.spring.eventmanagement.repository.EventRepository;
-import com.spring.eventmanagement.repositoryDatatable.SearchCriteria;
+import com.spring.eventmanagement.repositoryDatatable.EventDatatableRepository;
 import com.spring.eventmanagement.repositoryDatatable.EventSpecification;
+import com.spring.eventmanagement.repositoryDatatable.SearchCriteria;
 import com.spring.eventmanagement.service.AdminService;
+import com.spring.eventmanagement.service.EmailService;
 import com.spring.eventmanagement.utils.SearchParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.http.HttpStatus;
@@ -32,6 +32,9 @@ class EventController {
 
     @Autowired
     private EventRepository eventRepository;
+
+    @Autowired
+    private EmailService emailService;
     @Autowired
     private EventDatatableRepository eventDatatableRepository;
     @Autowired
@@ -73,6 +76,8 @@ class EventController {
 //        event.setCreatedBy(getLoginUser());
 
         Event created = eventRepository.save(event);
+        emailService.newEvent(created);
+
         return created;
     }
 
@@ -88,7 +93,9 @@ class EventController {
             old.setEnd(event.getEnd());
             old.setModification(new Date());
 
-            return eventRepository.save(old);
+            Event updated = eventRepository.save(old);
+            emailService.updateEvent(updated);
+            return updated;
         }
         return event;
     }
@@ -216,20 +223,20 @@ class EventController {
                 new EventSpecification(
                         new SearchCriteria("createdBy",
                                 ":",
-                              Admin.builder().id(  adminId).build()
+                                Admin.builder().id(adminId).build()
                         )
                 );
         EventSpecification spec2 =
                 new EventSpecification(
                         new SearchCriteria("isDeleted",
                                 ":",
-                              false
+                                false
                         )
                 );
 
         return eventDatatableRepository.findAll(
-                 dataTablesInput
-                ,spec.and(spec2)
+                dataTablesInput
+                , spec.and(spec2)
         );
 //        return eventDatatableRepository.findAllByCreatedByAndIsDeletedFalseOrderByIdDesc(
 //                Admin.builder().id(adminId).build()

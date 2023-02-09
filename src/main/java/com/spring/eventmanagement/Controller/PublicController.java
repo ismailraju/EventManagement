@@ -3,6 +3,7 @@ package com.spring.eventmanagement.Controller;
 import com.spring.eventmanagement.entity.Event;
 import com.spring.eventmanagement.entity.Participant;
 import com.spring.eventmanagement.repository.ParticipantRepository;
+import com.spring.eventmanagement.service.EmailService;
 import com.spring.eventmanagement.service.EventService;
 import com.spring.eventmanagement.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +20,12 @@ public class PublicController extends Utils {
 
 
     private final EventService eventService;
+    private final EmailService emailService;
     private final ParticipantRepository participantRepository;
 
-    public PublicController(EventService eventService, ParticipantRepository participantRepository) {
+    public PublicController(EventService eventService, EmailService emailService, ParticipantRepository participantRepository) {
         this.eventService = eventService;
+        this.emailService = emailService;
         this.participantRepository = participantRepository;
     }
 
@@ -46,8 +49,9 @@ public class PublicController extends Utils {
         participant.setCreation(new Date());
 
 
-        participantRepository.save(participant);
+        Participant participant1 = participantRepository.save(participant);
 
+        emailService.newParticipant(participant1);
 
         long count = participantRepository.countByEvent(event);
         event.setGoing((int) count);
