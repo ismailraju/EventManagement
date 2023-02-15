@@ -14,7 +14,9 @@ import java.util.Date;
 
 
 @Entity
-@Table(name = "participant")
+@Table(name = "participant",uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"email","event_id"})
+})
 @Getter
 @Setter
 @AllArgsConstructor
@@ -31,7 +33,7 @@ public class Participant {
     private String name;
 
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false )
     @Email(message = "Please provide a valid e-mail")
     @NotEmpty(message = "Please provide an e-mail")
     private String email;

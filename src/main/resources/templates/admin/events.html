@@ -183,7 +183,7 @@
 
                 // return moment(data).local().format("DD-MMM-YYYY hh:mm a");
                 // return moment(data).format("DD-MMM-YYYY hh:mm a");
-                return moment(data).format("YYYY-MM-DD HH:mm");
+                return moment.utc(data).format("YYYY-MM-DD HH:mm");
             }
 
             var datatable = $('#eventsdataTable').DataTable({

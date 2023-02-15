@@ -1,13 +1,18 @@
 package com.spring.eventmanagement.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -17,7 +22,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Event  implements Serializable {
+public class Event implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,12 +45,15 @@ public class Event  implements Serializable {
     @Column(name = "start")
     @NotEmpty(message = "Please provide start time")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date start;
+
+ private Date start;
 
 
     @Column(name = "end")
     @NotEmpty(message = "Please provide end time")
     @Temporal(TemporalType.TIMESTAMP)
+//    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="dd MMM yyyy HH:mm:ss")
+//    @Type(type="org.jadira.usertype.dateandtime.legacyjdk.PersistentDate")
     private Date end;
 
 
@@ -65,14 +73,48 @@ public class Event  implements Serializable {
     @Column(name = "not_going")
     private int notGoing;
 
-    @Column(name = "is_deleted", nullable = false,columnDefinition="bit(1) default false"  )
-    private boolean isDeleted=false;
+    @Column(name = "is_deleted", nullable = false, columnDefinition = "bit(1) default false")
+    private boolean isDeleted = false;
 
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "created_by", referencedColumnName = "id")
     private Admin createdBy;
 
-    @Column(name = "is_1hour_email_transfer", nullable = false,columnDefinition="bit(1) default false"  )
-    private boolean is1hourEmailTransfer=false;
+    @Column(name = "is_1hour_email_transfer", nullable = false, columnDefinition = "bit(1) default false")
+    private boolean is1hourEmailTransfer = false;
+
+    @Column(name = "is_repeat", nullable = false, columnDefinition = "bit(1) default false")
+    private boolean isRepeat = false;
+
+    @Transient
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<Integer> dow ;
+
+    @Transient
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Date start2;
+
+    @Transient
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Date end2;
+
+//    @Transient
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
+//    private String startTime;
+//
+//    @Transient
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
+//    private String endTime;
+
+//
+//    @Transient
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
+//    private String startRecur;
+//
+//    @Transient
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
+//    private String endRecur;
+
+
 }

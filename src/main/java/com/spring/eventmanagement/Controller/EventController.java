@@ -23,9 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 class EventController {
@@ -42,6 +40,8 @@ class EventController {
     @Autowired
     private AdminRepository adminRepository;
 
+    private SimpleDateFormat timeFormat=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+    private SimpleDateFormat dateFormat=new SimpleDateFormat("YYYY-MM-dd");
 
     @RequestMapping(value = "/allevents", method = RequestMethod.GET)
     public List<Event> allEvents() {
@@ -63,6 +63,39 @@ class EventController {
 //                start,
 //                end
 //        );
+        for (int i = 0; i < events.size(); i++) {
+            if(events.get(i).isRepeat()){
+                Event event = events.get(i);
+                int day = event.getStart().getDay();
+                events.get(i).setDow(Arrays.asList(day));
+
+                events.get(i).setStart2(  event.getStart() );
+                events.get(i).setEnd2( event.getEnd() );
+
+
+//
+//                events.get(i).setStartTime( timeFormat.format(event.getStart()));
+//                events.get(i).setEndTime(timeFormat.format(event.getEnd()));
+
+//                events.get(i).setStartRecur( dateFormat.format(event.getStart()));
+//                events.get(i).setEndRecur(dateFormat.format(event.getEnd()));
+
+//                Calendar calendar = Calendar.getInstance();
+//
+//                calendar.setTime(event.getStart());
+//                calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY)+1);
+//                events.get(i).setStart(calendar.getTime());
+//
+//
+//                calendar.setTime(event.getEnd());
+//                calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY)+1);
+//                events.get(i).setEnd(calendar.getTime());
+
+//                events.get(i).setAllDay(true);
+
+
+            }
+        }
 
         return events;
     }
@@ -91,6 +124,7 @@ class EventController {
             old.setLocation(event.getLocation());
             old.setStart(event.getStart());
             old.setEnd(event.getEnd());
+            old.setRepeat(event.isRepeat());
             old.setModification(new Date());
 
             Event updated = eventRepository.save(old);

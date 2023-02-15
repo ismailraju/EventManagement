@@ -36,7 +36,7 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String sender;
 
-    SimpleDateFormat dateFormat=new SimpleDateFormat("YYYY/MMM/DD HH:mm");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY/MMM/dd HH:mm");
 
     // Method 1
     // To send a simple email
@@ -181,6 +181,27 @@ public class EmailService {
 
     }
 
+    public void sendOrganizerAboutNewParticipant(Participant participant) {
+        String subject = "New Participant of " + participant.getEvent().getTitle();
+        String body = "You have got a new Participant (" + participant.getEmail() + ") for  Event '" + participant.getEvent().getTitle() + "'." +
+                getEventDetails(participant.getEvent());
+
+
+        List<Participant> participants = participantRepository.findAllByEvent(participant.getEvent());
+        AtomicInteger cnt = new AtomicInteger(1);
+        String participantListStr = participants.stream().map(e -> (cnt.getAndIncrement()) + ". " + e.getName() + "(" + e.getEmail() + ")").collect(Collectors.joining("\n"));
+        body += "\nAll Participants: \n" + participantListStr;
+
+
+        EmailDetails emailDetails = EmailDetails.builder()
+                .recipient(participant.getEvent().getCreatedBy().getEmail())
+                .subject(subject)
+                .msgBody(body)
+                .build();
+
+        sendSimpleMail(emailDetails);
+
+    }
 
     public void sendFriendParticipant(Participant participant) {
         String subject = "Participants for " + participant.getEvent().getTitle();
@@ -190,7 +211,7 @@ public class EmailService {
         List<Participant> participants = participantRepository.findAllByEvent(participant.getEvent());
         AtomicInteger cnt = new AtomicInteger(1);
         String participantListStr = participants.stream().map(e -> (cnt.getAndIncrement()) + ". " + e.getName() + "(" + e.getEmail() + ")").collect(Collectors.joining("\n"));
-        body += "Participants: \n" + participantListStr;
+        body += "\nParticipants: \n" + participantListStr;
         for (int i = 0; i < participants.size() && participants.size() > 1; i++) {
 
             Participant pp = participants.get(i);
@@ -210,28 +231,31 @@ public class EmailService {
     String getEventDetails(Event event) {
         return "\nDetails: " + event.getDescription() +
                 "\nLocation: " + event.getLocation() + "" +
-                "\nTime: " +dateFormat.format( event.getStart())  + " to " + dateFormat.format( event.getEnd());
+                "\nTime: " + dateFormat.format(event.getStart()) + " to " + dateFormat.format(event.getEnd());
 
 
     }
 
-@Async
+    @Async
     public void newParticipant(Participant participant) {
-
+        sendOrganizerAboutNewParticipant(participant);
         sendNewParticipant(participant);
-        sendFriendParticipant(participant);
+//        sendFriendParticipant(participant);
     }
+
     @Async
     public void newEvent(Event event) {
         sendNewEventForOrganizer(event);
 
     }
+
     @Async
     public void updateEvent(Event event) {
         sendUpdateEventForOrganizer(event);
         sendUpdateEventForParticipant(event);
 
     }
+
     @Async
     public void before1hour(Event event) {
         sendBefore1hourForOrganizer(event);
@@ -244,6 +268,10 @@ public class EmailService {
         String body = "The Event (" + event.getTitle() + ")  will be held within 1 hour." +
                 getEventDetails(event);
 
+        List<Participant> participants = participantRepository.findAllByEvent(event);
+        AtomicInteger cnt = new AtomicInteger(1);
+        String participantListStr = participants.stream().map(e -> (cnt.getAndIncrement()) + ". " + e.getName() + "(" + e.getEmail() + ")").collect(Collectors.joining("\n"));
+        body += "\nParticipants: \n" + participantListStr;
 
         EmailDetails emailDetails = EmailDetails.builder()
                 .recipient(event.getCreatedBy().getEmail())

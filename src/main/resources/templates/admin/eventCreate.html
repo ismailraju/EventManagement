@@ -138,6 +138,10 @@
             <input type="datetime-local" id="enddateandtime" class="form-control"/>
 
         </div>
+        <div class="form-group">
+            <label for="repeat">Repeat Weekly</label>
+            <input type="checkbox" id="repeat" name="repeat" checked="checked"/>
+        </div>
 
         <div class="form-group">
             <input type="hidden" name="uid" id="uid"/>
@@ -180,6 +184,11 @@
         <div class="form-group">
             <label for="modenddateandtime">End</label>
             <input type="datetime-local" id="modenddateandtime" class="form-control"/>
+        </div>
+
+        <div class="form-group">
+            <label for="modrepeat">Repeat Weekly</label>
+            <input type="checkbox" id="modrepeat" name="modrepeat" checked="checked"/>
         </div>
 
         <div class="form-group">
@@ -253,7 +262,7 @@
             tips = $(".validateTips");
 
         function validateDateRange(start, end) {
-
+            debugger;
             if (!start.isValid()) {
                 alert("Start date is invalid");
                 return false;
@@ -285,7 +294,7 @@
 
 
         function removeEvent() {
-
+            debugger;
 
             var eventStart = moment(modstartdateandtime.value);
             var eventEnd = moment(modenddateandtime.value);
@@ -324,10 +333,15 @@
         }
 
         function editEvent(event, elements) {
+            debugger;
 
-
-            var eventStart = moment(event.start).format("YYYY-MM-DDTHH:mm:ss"); //moment(event.start);
-            var eventEnd = moment(event.end).format("YYYY-MM-DDTHH:mm:ss");
+            if (event.repeat) {
+                var eventStart = moment.utc(event.start2).format("YYYY-MM-DDTHH:mm:ss");
+                var eventEnd = moment.utc(event.end2).format("YYYY-MM-DDTHH:mm:ss");
+            } else {
+                var eventStart = moment.utc(event.start).format("YYYY-MM-DDTHH:mm:ss");
+                var eventEnd = moment.utc(event.end).format("YYYY-MM-DDTHH:mm:ss");
+            }
 
             // alert(eventStart + "   " + eventEnd + "   " + event.start + "   " + event.end);
             modtitle.value = event.title;
@@ -336,13 +350,15 @@
             modstartdateandtime.value = eventStart;
             modenddateandtime.value = eventEnd;
             moduid.value = event.id;
+            modrepeat.checked = event.repeat;
             editDialog.dialog("open");
         }
 
         function saveEvent() {
+            debugger;
             var valid = true;
-            var eventStart = moment(modstartdateandtime.value);
-            var eventEnd = moment(modenddateandtime.value);
+            var eventStart = moment.utc(modstartdateandtime.value);
+            var eventEnd = moment.utc(modenddateandtime.value);
 
             // alert(eventStart + "   " + eventEnd + "   " + modstartdateandtime.value + "   " + modenddateandtime.value);
 
@@ -363,6 +379,7 @@
                     end: eventEnd,
                     description: moddescription.value,
                     location: modlocation.value,
+                    repeat: modrepeat.checked,
                     createdBy: {
                         id: adminId
                     }
@@ -391,11 +408,19 @@
 
 
         function updateEvent(event) {
+            debugger;
             var valid = true;
 
 
-            eventStart =  event.start ;
-            eventEnd =  event.end ;
+            // if(event.repeat){
+            //     var eventStart = event.start2;
+            //     var eventEnd =  event.end2;
+            // }else{
+            //     var eventStart = event.start;
+            //     var eventEnd =  event.end;
+            // }
+            eventStart = event.start;
+            eventEnd = event.end;
 
             // eventStart = moment.utc(event.start).toDate();
             // eventEnd = moment.utc(event.end).toDate();
@@ -408,6 +433,7 @@
                 end: eventEnd,
                 description: event.description,
                 location: event.location,
+                repeat: event.repeat,
                 createdBy: {
                     id: adminId
                 }
@@ -421,7 +447,7 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (data) {
-                    // $('#calendar').fullCalendar('refetchEvents');
+                     $('#calendar').fullCalendar('refetchEvents');
                 },
                 failure: function (errMsg) {
                     alert(errMsg);
@@ -432,11 +458,11 @@
         }
 
         function addEvent(start, end) {
-
+            debugger;
             var valid = true;
 
-            var eventStart = moment(startdateandtime.value);
-            var eventEnd = moment(enddateandtime.value);
+            var eventStart = moment.utc(startdateandtime.value);
+            var eventEnd = moment.utc(enddateandtime.value);
 
             valid = valid && newtitle.value;
             valid = valid && validateDateRange(eventStart, eventEnd);
@@ -452,6 +478,7 @@
                     title: newtitle.value,
                     description: description.value,
                     location: newlocation.value,
+                    repeat: repeat.checked,
                     start: eventStart,
                     end: eventEnd,
                     createdBy: {
@@ -526,16 +553,17 @@
         $(document).ready(function () {
 
             $('#calendar').fullCalendar({
-                timezone: 'local',
+
                 header: {
                     left: 'prev,next today',
                     center: 'title',
                     right: 'month,agendaWeek,agendaDay'
                 },
-                defaultDate: moment().format("YYYY-MM-DD"),
+                // defaultDate: moment().format("YYYY-MM-DD"),
                 editable: true,
                 eventLimit: true, // allow "more" link when too many events
                 slotDuration: '00:30:00',
+                slotMinutes: 30,
                 events: {
                     url: '/allevents/' + adminId,
                     type: 'GET',
@@ -547,23 +575,27 @@
                 },
                 selectable: true,
                 selectHelper: true,
+                timeZone:'UTC',
                 selectAllow: function (info) {
                     // return (info.start >= getDateWithoutTime(new Date()));
                     return (info.start.isBefore(moment()));
                 },
                 select: function (start, end) {
+                    debugger;
+                     end= moment.utc(start).add(moment.duration(30, 'minutes'));
                     console.log(JSON.stringify(start));
                     if (validateDateRange(start, end) == false) {
                         return false;
                     }
 
 
-                    startdateandtime.value = moment(start).format("YYYY-MM-DDTHH:mm:ss");
-                    enddateandtime.value = moment(end).format("YYYY-MM-DDTHH:mm:ss");
+                    startdateandtime.value = moment.utc(start).format("YYYY-MM-DDTHH:mm:ss");
+                    enddateandtime.value = moment.utc(end).format("YYYY-MM-DDTHH:mm:ss");
                     dialog.dialog("open");
                 },
 
                 eventClick: function (event, element) {
+                    debugger;
                     editEvent(event, element);
 
                     //$('#calendar').fullCalendar('updateEvent', event);
@@ -576,6 +608,14 @@
                 },
 
                 eventDrop: function (event) {
+                    debugger;
+                    // if(event.repeat){
+                    //     var duration = moment.duration(moment(event.end2)
+                    //         .diff(moment(event.start2)));
+                    //     var minutes = duration.asMinutes();
+                    //   //  event.end= moment(event.start).add(moment.duration(minutes, 'minutes'));
+                    // }
+
                     if (validateDateRange(event.start, event.end) == false) {
                         event.revert();
                         return false;
